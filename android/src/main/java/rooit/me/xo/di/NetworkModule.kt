@@ -1,66 +1,40 @@
 package rooit.me.xo.di
 
-import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import de.jensklingenberg.ktorfit.Ktorfit
+import de.jensklingenberg.ktorfit.converter.builtin.CallConverterFactory
+import de.jensklingenberg.ktorfit.converter.builtin.FlowConverterFactory
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import okhttp3.Cache
-import okhttp3.Interceptor
-import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.android.ext.koin.androidApplication
 import org.koin.core.scope.Scope
 import org.koin.dsl.module
-import retrofit2.Retrofit
 import rooit.me.xo.BuildConfig
-import java.util.concurrent.TimeUnit
-
-private const val CONNECT_TIMEOUT = 15L
-private const val WRITE_TIMEOUT = 15L
-private const val READ_TIMEOUT = 15L
-private val contentType = "application/json"
 
 val JSON = Json {
     coerceInputValues = true
     ignoreUnknownKeys = true
     useAlternativeNames = false
+    isLenient = true
 }
 
 object NetworkModule {
-    val RetrofitModule = module {
-        single { Cache(androidApplication().cacheDir, 10L * 1024 * 1024) }
-        single { retrofitHttpClient() }
-        single { retrofitBuilder() }
+    val KtorfitModule = module {
+        single { ktorfitBuilder() }
     }
 
-//Ref : https://blog.csdn.net/jingzz1/article/details/120646631
-//Ref : https://github.com/JakeWharton/retrofit2-kotlinx-serialization-converter/issues/58
-    private fun Scope.retrofitBuilder(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL)
-            .addConverterFactory(JSON.asConverterFactory(contentType.toMediaType()))
-            .client(get())
-            .build()
-    }
-
-    private fun Scope.retrofitHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder().apply {
-            cache(get())
-            connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
-            writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
-            readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
-            retryOnConnectionFailure(true)
-            addInterceptor(HttpLoggingInterceptor().apply {
-                level = if (BuildConfig.DEBUG) {
-                    HttpLoggingInterceptor.Level.BODY
-                } else {
-                    HttpLoggingInterceptor.Level.NONE
+    private fun Scope.ktorfitBuilder(): Ktorfit {
+        return Ktorfit.Builder().apply {
+            baseUrl(BuildConfig.BASE_URL)
+            httpClient(HttpClient {
+                install(ContentNegotiation) {
+                    json(JSON)
                 }
             })
-            addInterceptor { chain ->
-                chain.proceed(chain.request().newBuilder().apply {
-                    header("Accept", contentType)
-                }.build())
-            }
+            converterFactories(
+                FlowConverterFactory(),
+                CallConverterFactory(),
+            )
         }.build()
     }
 }

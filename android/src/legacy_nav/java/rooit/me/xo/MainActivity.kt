@@ -15,7 +15,6 @@ import rooit.me.xo.databinding.ActivityMainBinding
 import rooit.me.xo.ui.flow.FlowStep
 import rooit.me.xo.ui.flow.TAG_FLOW_STEP
 import rooit.me.xo.utils.fragment.FragmentResultRequestKey
-import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -50,7 +49,6 @@ class MainActivity : AppCompatActivity() {
                 this
             ) { requestkey, bundle ->
                 if (requestkey == FragmentResultRequestKey) {
-                    Timber.e("Show FragmentResult bundle $bundle")
                      bundle.getString(TAG_FLOW_STEP)?.let {flowstep->
                          this.navController?.apply {
                              navigateUp()

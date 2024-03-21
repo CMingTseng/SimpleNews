@@ -28,16 +28,14 @@ class MainApp : Application() {
             // Reference Android context
             androidContext(this@MainApp)
             // Load modules
-            modules(NetworkModule.RetrofitModule)
             modules(listOf(
-                NetworkModule.RetrofitModule,
+                NetworkModule.KtorfitModule,
                 apiModule,
                 repositoryModule,
                 viewModelModule,
                 dbModule
             ))
         }
-
         instance = this
     }
 }

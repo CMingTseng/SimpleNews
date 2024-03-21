@@ -14,5 +14,5 @@
 - 可以使⽤任何協助你開發的 third party libs
 
 初始化 :  13aff3d691205cb3870b37fd762350c4aa4bbcf8
-add productFlavors : 
+add productFlavors : 65c7140dfe8f30d3d6c31ee7910bc7e9f9db1c9c
 

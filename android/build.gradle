@@ -1,12 +1,13 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-kapt'
     id "org.jetbrains.kotlin.plugin.serialization"
     id "org.jetbrains.compose"
-
     id "io.realm.kotlin"
+    id "com.google.devtools.ksp" version "1.9.22-1.0.18"
+//    id "de.jensklingenberg.ktorfit"
 }
+apply plugin: "de.jensklingenberg.ktorfit"
 
 android {
     compileSdk 34
@@ -85,13 +86,9 @@ android {
                 implementation libs.splashscreen
                 implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01"
 
-                implementation libs.retrofit2
-
-                implementation libs.retrofit2.converter.kotlinx.serialization
-                implementation libs.okhttp
-                implementation libs.okhttp.interceptor.logging
+//              Ref : https://medium.com/@jonathan.mercandalli_41381/move-from-kapt-to-ksp-in-glide-on-android-dc786cab2584
                 implementation libs.glide
-                kapt libs.glide.compiler
+                ksp libs.glide.ksp
             }
         }
     }
@@ -120,6 +117,15 @@ dependencies {
     implementation platform(libs.androidx.compose.bom)
     implementation libs.androidx.ui.graphics
     implementation libs.androidx.compose.material3
+
+    implementation libs.ktor.core
+    implementation libs.ktor.android
+    implementation libs.ktor.negotiation
+    implementation libs.ktor.serialization
+    implementation libs.ktor.serialization.json
+
+    implementation libs.de.ktorfit
+    ksp libs.de.ktorfit.ksp
 
     implementation  libs.realm.kotlin.base
 //    implementation libs.realm.kotlin.sync
