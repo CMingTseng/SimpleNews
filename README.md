@@ -14,5 +14,12 @@
 - 可以使⽤任何協助你開發的 third party libs
 
 初始化 :  13aff3d691205cb3870b37fd762350c4aa4bbcf8
-add productFlavors : 65c7140dfe8f30d3d6c31ee7910bc7e9f9db1c9c
+
+加入 productFlavors : 65c7140dfe8f30d3d6c31ee7910bc7e9f9db1c9c
+
+## 修改需求(Retrofit 轉 Ktor / Ktorfit)
+
+- Retrofit部分無法跨平台 因此改用全kotlin撰寫的[Ktor](https://ktor.io/)達成跨平台寫法可類似Retrofit
+
+ 
 
