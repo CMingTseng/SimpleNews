@@ -13,6 +13,6 @@
 - 實作 MVVM 或 MVVMC 軟體框架
 - 可以使⽤任何協助你開發的 third party libs
 
-初始化 :  init 
-
+初始化 :  13aff3d691205cb3870b37fd762350c4aa4bbcf8
+add productFlavors : 
 

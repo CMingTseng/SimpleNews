@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.viewModels
-import androidx.navigation.ui.setupWithNavController
 import rooit.me.xo.R
 import rooit.me.xo.databinding.FragmentFlowMainBinding
 import rooit.me.xo.ui.flow.BaseFlowFragment

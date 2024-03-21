@@ -9,13 +9,13 @@ import android.view.Window
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.fragment.NavHostFragment
 import rooit.me.xo.databinding.ActivityMainBinding
 import rooit.me.xo.ui.flow.FlowStep
 import rooit.me.xo.ui.flow.TAG_FLOW_STEP
 import rooit.me.xo.utils.fragment.FragmentResultRequestKey
 import timber.log.Timber
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
