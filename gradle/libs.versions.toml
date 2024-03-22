@@ -30,7 +30,7 @@ jetpack_camera_version = '1.1.0'
 #region compose
 activity_compose = "1.8.2"
 android-compose-compiler = "1.5.10"#https://developer.android.com/jetpack/androidx/versions/stable-channel
-compose-bom = "2024.02.00"# Ref : https://developer.android.com/jetpack/compose/bom
+compose-bom = "2024.03.00"# Ref : https://developer.android.com/jetpack/compose/bom
 compose-version = "1.6.0"
 #endregion
 

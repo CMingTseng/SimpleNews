@@ -12,3 +12,11 @@ public data class News(
     @SerialName("totalResults")
     val totalResults: Int
 )
+
+public sealed class NewAction {
+    public data object Load : NewAction()
+}
+
+public data class NewState(
+    val news: List<Article> = emptyList()
+)

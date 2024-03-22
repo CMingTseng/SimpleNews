@@ -19,6 +19,8 @@ class NewsViewModel (private val repo: NewsRepository) : ViewModel() {
     private val _isRefreshing = MutableLiveData(false)
     val isRefreshing: LiveData<Boolean> = _isRefreshing
 
+    //Ref : https://developer.android.com/kotlin/flow/stateflow-and-sharedflow?hl=zh-tw
+    //      https://medium.com/@chn_dr/fetching-api-using-retrofit-a44906a8499d
     private val _allNews : MutableStateFlow<List<Article>> = MutableStateFlow(listOf())
     val allNews : StateFlow<List<Article>> = _allNews
 
