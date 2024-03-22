@@ -48,7 +48,7 @@ private val SimpleNewsScheme = darkColorScheme(
 )
 
 @Composable
-fun MyApplicationTheme(
+fun SimpleNewsTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
