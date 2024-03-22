@@ -12,19 +12,20 @@ import rooit.me.xo.BuildConfig
 import rooit.me.xo.model.Article
 import rooit.me.xo.repository.NewsRepository
 import timber.log.Timber
-
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 class NewsViewModel (private val repo: NewsRepository) : ViewModel() {
 
     private val _isRefreshing = MutableLiveData(false)
     val isRefreshing: LiveData<Boolean> = _isRefreshing
 
-    private val _allNews = MutableLiveData<List<Article>>()
-    val allNews: LiveData<List<Article>> = _allNews
+    private val _allNews : MutableStateFlow<List<Article>> = MutableStateFlow(listOf())
+    val allNews : StateFlow<List<Article>> = _allNews
 
     fun fetchTopHeadlines() {
         repo.fetchTopHeadlinesFromDBFlow()
             .onEach {
-                _allNews.postValue(it)
+                _allNews.value=it
             }
             .launchIn(viewModelScope)
         repo.fetchTopHeadlinesFlow("us", BuildConfig.API_KEY)

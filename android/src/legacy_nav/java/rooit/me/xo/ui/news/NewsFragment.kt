@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import rooit.me.xo.R
 import rooit.me.xo.adapter.ArticleAdapter
 import rooit.me.xo.databinding.FragmentNewsBinding
-
 
 class NewsFragment : Fragment() {
     private var _binding: FragmentNewsBinding? = null
@@ -31,12 +31,12 @@ class NewsFragment : Fragment() {
                 }
             }
         }
-        vm.allNews.observe(viewLifecycleOwner, Observer { result ->
-            result?.let {
+        lifecycleScope.launch {
+            vm.allNews.collect {
                 val adapter = ArticleAdapter(it)
                 binding.list.adapter = adapter
             }
-        })
+        }
         vm.isRefreshing.observe(viewLifecycleOwner) {
             binding.refresh.isRefreshing = it
         }
