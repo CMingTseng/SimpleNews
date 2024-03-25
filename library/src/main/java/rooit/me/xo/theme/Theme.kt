@@ -14,7 +14,10 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
-
+//Ref : https://material-components.github.io/material-components-android-compose-theme-adapter/
+//Ref : https://developer.android.com/jetpack/compose/designsystems/views-to-compose#material-theme-adapter
+//Ref : https://m3.material.io/theme-builder
+//Ref : https://betterprogramming.pub/jetpack-compose-custom-themes-b1836877981d
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
     secondary = PurpleGrey80,
