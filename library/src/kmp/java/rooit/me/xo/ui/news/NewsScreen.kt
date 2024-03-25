@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -31,14 +30,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import com.seiko.imageloader.rememberImagePainter
+import rooit.me.xo.model.NewAction
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 //    fun NewsScreen (onNavigate: (Todo?) -> Unit) {
-fun NewsScreen (viewModel: NewsViewModel) {
-//    val viewModel = viewModel(NewsViewModel::class.java)
-    val allnews = viewModel.allNews.collectAsState()
+public fun NewsScreen (viewModel: NewsViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -56,13 +56,14 @@ fun NewsScreen (viewModel: NewsViewModel) {
             )
         },
     ) { innerPadding ->
-       LazyColumn(Modifier.fillMaxSize()) {
-            items(items = allnews.value ){
-                NewsItem(it.urlToImage ?: "", it.title ?: "none")
-            }
-        }
+        val state by viewModel.uiState.collectAsState()
         LaunchedEffect(Unit) {
-            viewModel.fetchTopHeadlines()
+            viewModel.dispatch(NewAction.Load)
+        }
+       LazyColumn(Modifier.fillMaxSize()) {
+           items(items = state.news) {
+               NewsItem(it.urlToImage ?: "", it.title ?: "none")
+           }
         }
     }
 }

@@ -1,5 +1,6 @@
 package rooit.me.xo.ui.news
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,38 +10,48 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import rooit.me.xo.BuildConfig
-import rooit.me.xo.model.Article
 import timber.log.Timber
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import rooit.me.xo.model.NewAction
 import rooit.me.xo.repository.NewsRepository
 
-class NewsViewModel (private val repo: NewsRepository) : ViewModel() {
-
-    private val _isRefreshing = MutableLiveData(false)
-    val isRefreshing: LiveData<Boolean> = _isRefreshing
-
+class NewsViewModel(private val repo: NewsRepository) : ViewModel() {
     //Ref : https://developer.android.com/kotlin/flow/stateflow-and-sharedflow?hl=zh-tw
     //      https://medium.com/@chn_dr/fetching-api-using-retrofit-a44906a8499d
-    private val _allNews : MutableStateFlow<List<Article>> = MutableStateFlow(listOf())
-    val allNews : StateFlow<List<Article>> = _allNews
+    private val _uiState = MutableStateFlow(NewAction.NewState())
+    public val uiState: MutableStateFlow<NewAction.NewState> = _uiState
 
-    fun fetchTopHeadlines() {
+    public fun dispatch(action: NewAction) {
+        when (action) {
+            is NewAction.Load -> fetchTopHeadlines()
+        }
+    }
+
+    private fun fetchTopHeadlines() {
         repo.fetchTopHeadlinesFromDBFlow()
             .onEach {
-                _allNews.value=it
+
+                _uiState.setState {
+                    copy(it)
+                }
             }
             .launchIn(viewModelScope)
         repo.fetchTopHeadlinesFlow("us", BuildConfig.API_KEY)
-            .onStart { _isRefreshing.value = true }
+            .onStart {
+                _uiState.setState {
+                    copy(emptyList())
+                }
+            }
             .onEach { articles ->
                 repo.syncResultIntoDB(articles)
-                _isRefreshing.value = false
             }
             .catch {
-                _isRefreshing.value = false
                 Timber.e(it)
             }
             .launchIn(viewModelScope)
     }
+}
+
+private fun <T> MutableStateFlow<T>.setState(reducer: T.() -> T) {
+    this.value = this.value.reducer()
 }

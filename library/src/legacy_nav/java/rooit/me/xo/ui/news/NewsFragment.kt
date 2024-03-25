@@ -12,6 +12,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import rooit.me.xo.R
 import rooit.me.xo.adapter.ArticleAdapter
 import rooit.me.xo.databinding.FragmentNewsBinding
+import rooit.me.xo.model.NewAction
 
 class NewsFragment : Fragment() {
     private var _binding: FragmentNewsBinding? = null
@@ -32,18 +33,18 @@ class NewsFragment : Fragment() {
             }
         }
         lifecycleScope.launch {
-            vm.allNews.collect {
-                val adapter = ArticleAdapter(it)
-                binding.list.adapter = adapter
+            vm.uiState.collect {
+                it.news.isEmpty()
+                if ( it.news.isEmpty()){
+                    binding.refresh.isRefreshing = true
+                }else{
+                    binding.refresh.isRefreshing = false
+                    val adapter = ArticleAdapter(it.news)
+                    binding.list.adapter = adapter
+                }
             }
         }
-        vm.isRefreshing.observe(viewLifecycleOwner) {
-            binding.refresh.isRefreshing = it
-        }
-        binding.refresh.setOnRefreshListener {
-            vm.fetchTopHeadlines()
-        }
-        vm.fetchTopHeadlines()
+        vm.dispatch(NewAction.Load)
         return binding.root
     }
 

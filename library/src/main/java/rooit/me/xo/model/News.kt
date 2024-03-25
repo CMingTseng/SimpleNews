@@ -15,8 +15,11 @@ public data class News(
 
 public sealed class NewAction {
     public data object Load : NewAction()
+    data class NewState(
+        var news: List<Article> = emptyList()
+    )
 }
 
-public data class NewState(
-    val news: List<Article> = emptyList()
-)
+//public data class NewState(
+//    val news: List<Article> = emptyList()
+//)
