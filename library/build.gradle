@@ -70,6 +70,7 @@ android {
     productFlavors {
         legacy_nav {
             dimension "product_code"
+            matchingFallbacks = ['release', 'debug']
             dependencies {
                 implementation libs.androidx.activity.ktx
                 implementation libs.androidx.fragment.ktx
@@ -90,7 +91,9 @@ android {
         }
         kmp {
             dimension "product_code"
+            matchingFallbacks = ['release', 'debug']
             dependencies {
+
                 implementation libs.androidx.lifecycle.runtime.ktx
                 implementation libs.androidx.activity.compose
                 implementation libs.androidx.ui
@@ -152,6 +155,8 @@ dependencies {
 
     implementation  libs.realm.kotlin.base
 //    implementation libs.realm.kotlin.sync
+
+    implementation project(':common')
 
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
