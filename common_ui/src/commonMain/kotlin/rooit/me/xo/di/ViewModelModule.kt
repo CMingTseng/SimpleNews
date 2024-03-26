@@ -5,7 +5,6 @@ import org.koin.dsl.module
 import rooit.me.xo.ui.news.NewsViewModel
 
 public val viewModelModule: Module = module {
-//    viewModel { NewsViewModel(get()) }
     factory {
         NewsViewModel(
             repo = get(),

@@ -122,7 +122,7 @@ android {
             manifest.srcFile 'src/legacy_nav/AndroidManifest.xml'
         }
         kmp {
-            java.srcDirs = ['src/kmp/java']
+            java.srcDirs = ['../common_ui/src/commonMain/kotlin','src/kmp/java']
             res.srcDirs = ['src/kmp/res']
             manifest.srcFile 'src/kmp/AndroidManifest.xml'
         }

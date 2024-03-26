@@ -10,7 +10,7 @@ plugins {
 
 group = "rooit.me.xo"
 version = "1.0-SNAPSHOT"
-
+//Ref : https://jeroenmols.com/blog/2021/03/17/share-code-kotlin-multiplatform/
 kotlin {
     jvm {
         compilations.all {
@@ -20,15 +20,17 @@ kotlin {
         withJava()
     }
     sourceSets {
-//        jvmMain {
-        val jvmMain by getting {
+        jvmMain {
+//        val jvmMain by getting {
+            kotlin.srcDir("../common_ui/src/commonMain/kotlin")
+
+//        }
             dependencies {
                 implementation(project(":common"))
                 implementation(compose.desktop.currentOs)
                 implementation(libs.skiko)
             }
         }
-//        }
         val jvmTest by getting
     }
 }
