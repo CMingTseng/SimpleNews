@@ -112,8 +112,9 @@ android {
     }
 
     sourceSets {
+        //TODO here legacy & kmp use the same di-viewModelModule
         main {
-            java.srcDirs = ['src/main/java']
+            java.srcDirs = ['../common_ui/src/commonMain/kotlin/rooit/me/xo/di','src/main/java']
             res.srcDirs = ['src/main/res']
         }
         legacy_nav {
@@ -121,8 +122,8 @@ android {
             res.srcDirs = ['src/legacy_nav/res']
             manifest.srcFile 'src/legacy_nav/AndroidManifest.xml'
         }
-        kmp {
-            java.srcDirs = ['../common_ui/src/commonMain/kotlin','src/kmp/java']
+        kmp { //TODO here kmp (android & JVM ) use the same (JB) compose ui
+            java.srcDirs = ['../common_ui/src/commonMain/kotlin/rooit/me/xo/ui','src/kmp/java']
             res.srcDirs = ['src/kmp/res']
             manifest.srcFile 'src/kmp/AndroidManifest.xml'
         }
