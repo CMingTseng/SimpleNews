@@ -49,6 +49,7 @@ buildscript {
         classpath "io.realm.kotlin:gradle-plugin:1.13.0"
         classpath "de.jensklingenberg.ktorfit:ktorfit-gradle-plugin:${ktorfit_version}"
 //        classpath "io.github.skeptick.libres:gradle-plugin:1.2.2" //i18n
+//        classpath 'com.codingfeline.buildkonfig:buildkonfig-gradle-plugin:0.15.1'
     }
 }
 
@@ -64,6 +65,7 @@ plugins {
     //apply plugin: "org.jetbrains.kotlin.plugin.serialization"
     id "org.jetbrains.compose" version "${jb_compose_version}" apply false
     alias(libs.plugins.i18n.skeptick.libres) apply false
+    alias(libs.plugins.buildkonfig) apply false
     //    id 'io.realm.kotlin' version "${realm_version}" apply false
 }
 

@@ -32,8 +32,6 @@ android {
         targetSdk 34
         versionCode 1
         versionName "1.0"
-        buildConfigField "String", "BASE_URL", "\"https://newsapi.org/\""
-        buildConfigField "String", "API_KEY", "\"f53a2c1085bd4e19859f4f3b07f2babf\""
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

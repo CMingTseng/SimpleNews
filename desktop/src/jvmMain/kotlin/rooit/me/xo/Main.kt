@@ -5,6 +5,7 @@ import androidx.compose.ui.window.application
 import org.koin.core.context.startKoin
 import rooit.me.xo.di.NetworkModule
 import rooit.me.xo.di.apiModule
+import rooit.me.xo.di.appInfoModule
 import rooit.me.xo.di.dbModule
 import rooit.me.xo.di.repositoryModule
 import rooit.me.xo.di.viewModelModule
@@ -19,6 +20,7 @@ fun main() = application {
                     dbModule,
                     NetworkModule.KtorfitModule,
                     repositoryModule,
+                    appInfoModule,
                     viewModelModule
                 )
             )

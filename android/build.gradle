@@ -159,6 +159,7 @@ dependencies {
 //    implementation libs.realm.kotlin.sync
 
     implementation project(':library')
+    implementation project(':common')
 
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit

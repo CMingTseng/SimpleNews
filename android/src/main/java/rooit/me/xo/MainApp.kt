@@ -7,6 +7,7 @@ import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import rooit.me.xo.di.NetworkModule
 import rooit.me.xo.di.apiModule
+import rooit.me.xo.di.appInfoModule
 import rooit.me.xo.di.dbModule
 import rooit.me.xo.di.repositoryModule
 import rooit.me.xo.di.viewModelModule
@@ -31,6 +32,7 @@ class MainApp : Application() {
             modules(listOf(
                 NetworkModule.KtorfitModule,
                 apiModule,
+                appInfoModule,
                 repositoryModule,
                 viewModelModule,
                 dbModule

@@ -36,6 +36,11 @@ compose-version = "1.6.0"
 
 #region Third party
 
+
+#region BuildConfig
+buildKonfig_version= "0.15.1"
+#endregion
+
 #region DI
 koin-version = "3.5.3"
 koin-jb-compose-version= "1.1.2"#next version is 3.6.0!!
@@ -111,6 +116,7 @@ jetbrains_kotlin_serialization = { id = "org.jetbrains.kotlin.plugin.serializati
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin_version" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-version" }
+buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildKonfig_version" }#com.codingfeline.buildkonfig:buildkonfig-gradle-plugin
 i18n_skeptick_libres = { id = "io.github.skeptick.libres", version = "1.2.2" }
 de-ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit_version" }
 realm = { id = "io.realm:realm-gradle-plugin", version.ref = "realm_version" }

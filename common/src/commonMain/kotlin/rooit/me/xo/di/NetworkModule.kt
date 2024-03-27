@@ -20,12 +20,11 @@ public val JSON: Json = Json {
 
 public object NetworkModule {
     public val KtorfitModule: Module = module {
-        single { ktorfitBuilder() }
+        single { ktorfitBuilder(get()) }
     }
-
-    private fun Scope.ktorfitBuilder(): Ktorfit {
+    private fun Scope.ktorfitBuilder(baseUrl: String ): Ktorfit {
         return Ktorfit.Builder().apply {
-            baseUrl("https://newsapi.org/")//FIXME DI from app level
+            baseUrl(baseUrl)
             httpClient(HttpClient {
                 install(ContentNegotiation) {
                     json(JSON)

@@ -1,3 +1,12 @@
+import com.codingfeline.buildkonfig.compiler.FieldSpec
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.INT
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.BOOLEAN
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.LONG
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.FLOAT
+
+
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     kotlin("multiplatform")
@@ -10,10 +19,11 @@ plugins {
     id("io.realm.kotlin")
     // Apply Realm s pecific linting plugin to get common Realm linting tasks
 //    id("realm-lint")
+    id("com.codingfeline.buildkonfig")
 }
 apply(plugin = "de.jensklingenberg.ktorfit")
 
-group = "funny.buildapp"
+group = "rooit.me.xo"
 version = "1.0-SNAPSHOT"
 val podName = "common"
 val ktorfit_version= libs.versions.ktorfit.qdsfdhvh.version.get()
@@ -24,6 +34,37 @@ libres {
     generateNamedArguments = true // false by default
     baseLocaleLanguageCode = "ru" // "en" by default
     camelCaseNamesForAppleFramework = false // false by default
+}
+
+buildkonfig {
+    packageName = project.group.toString()
+    println("Show me  packageName $packageName ")
+    objectName="BuildConfig"
+    exposeObjectWithName="BuildConfig"
+
+
+    defaultConfigs {
+        buildConfigField(Type.STRING, "test", "testvalue")
+        buildConfigField(Type.BOOLEAN, "DEBUG", false.toString())
+    }
+
+    targetConfigs {
+        create("android") {
+            buildConfigField(FieldSpec.Type.STRING, "target", "me_android")
+        }
+        create("jvm") {
+            buildConfigField(FieldSpec.Type.STRING, "target", "jvm")
+        }
+        create("ios") {
+            buildConfigField(FieldSpec.Type.STRING, "target", "ios")
+        }
+        create("desktop") {
+            buildConfigField(FieldSpec.Type.STRING, "desktopvalue", "desktop")
+        }
+        create("jsCommon") {
+            buildConfigField(FieldSpec.Type.STRING, "target", "jsCommon")
+        }
+    }
 }
 
 configurations.all {
