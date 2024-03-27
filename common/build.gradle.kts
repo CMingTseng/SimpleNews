@@ -23,7 +23,7 @@ plugins {
 }
 apply(plugin = "de.jensklingenberg.ktorfit")
 
-group = "rooit.me.xo"
+group = "rooit.me.xo.common"
 version = "1.0-SNAPSHOT"
 val podName = "common"
 val ktorfit_version= libs.versions.ktorfit.qdsfdhvh.version.get()
