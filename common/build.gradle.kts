@@ -176,7 +176,7 @@ kotlin {
             }
         }
 
-        val jvmTest by getting
+//        val jvmTest by getting
     }
 
     tasks.withType<org.jetbrains.kotlin.gradle.dsl.KotlinCompile<*>>().all {
