@@ -1,6 +1,6 @@
 package rooit.me.xo.ui.news
 
-import android.util.Log
+//import android.util.Log
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -47,11 +47,11 @@ public class NewsViewModel(public val repo: AuthRepository) : ViewModel() {
 //            .launchIn(viewModelScope)
         repo.fetchCodeForMobile()
             .onStart {
-                Log.e("weqed","Show SSS me $this")
+//                Log.e("weqed","Show SSS me $this")
             }.onEach {
-                 Log.e("weqed","Show me $it")
+//                 Log.e("weqed","Show me $it")
             }.catch {
-                Log.e("weqed","Show !! $this")
+//                Log.e("weqed","Show !! $this")
             }.launchIn(viewModelScope)
     }
 }
