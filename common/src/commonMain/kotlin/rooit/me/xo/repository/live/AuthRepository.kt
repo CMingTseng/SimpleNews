@@ -1,9 +1,10 @@
-package rooit.me.xo.repository
+package rooit.me.xo.repository.live
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import rooit.me.xo.api.AuthApis
-import rooit.me.xo.api.LOGIN
+import rooit.me.xo.api.live.AuthApis
+import rooit.me.xo.api.live.LOGIN
+
 
 public class AuthRepository(private val api: AuthApis) {
     public fun fetchCodeForMobile(): Flow<String> = flow {

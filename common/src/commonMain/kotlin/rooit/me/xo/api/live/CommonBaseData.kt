@@ -1,4 +1,4 @@
-package rooit.me.xo.api
+package rooit.me.xo.api.live
 
 import kotlinx.serialization.Serializable
 
