@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Level(
+public data class Level(
     @SerialName("colour")
     val colour: String?,
     @SerialName("levelid")

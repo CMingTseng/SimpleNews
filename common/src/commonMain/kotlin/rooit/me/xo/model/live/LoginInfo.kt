@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LoginInfo(
+public data class LoginInfo(
     @SerialName("acd_device")
     val acdDevice: String?,
     @SerialName("avatar")

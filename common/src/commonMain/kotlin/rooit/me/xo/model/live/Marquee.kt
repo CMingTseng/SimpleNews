@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Marquee(
+public data class Marquee(
     @SerialName("msg")
     val msg: List<String?>?
 )

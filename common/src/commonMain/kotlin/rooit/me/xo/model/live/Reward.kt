@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Reward(
+public data class Reward(
     @SerialName("reward_can_get")
     val rewardCanGet: Int?,
     @SerialName("reward_got_money")

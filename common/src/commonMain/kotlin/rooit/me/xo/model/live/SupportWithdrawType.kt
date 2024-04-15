@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SupportWithdrawType(
+public data class SupportWithdrawType(
     @SerialName("icon")
     val icon: String?,
     @SerialName("id")
