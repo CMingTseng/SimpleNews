@@ -9,8 +9,9 @@ public object AUTH {
     public const val DEVICE : String = GUEST
     public const val CODE : String = "Login.getCode"
     public const val CODE_EMAIL : String = "Login.getCodeByEmail"
-    public const  val EMAIL: String ="recipient_email"
-    public const  val REFRESH_TOKEN : String = "auth/refresh/token"
+    public const val EMAIL: String = "recipient_email"
+    public const val EMAIL_LOGIN: String = "User.setEmail"
+    public const val REFRESH_TOKEN: String = "auth/refresh/token"
 }
 
 public typealias LOGIN = AUTH
