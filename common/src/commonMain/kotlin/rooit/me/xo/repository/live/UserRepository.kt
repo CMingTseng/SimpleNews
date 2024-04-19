@@ -11,7 +11,7 @@ public class UserRepository(private val api: UserApis) {
     public fun fetchUserInfo(): Flow<UserInfo> = flow {
         try {
             val response = api.fetchUserInfo(
-                SELF.BASE_INFO,
+                SELF.GET_BASE_INFO,
                 "zh-cn",
                 "2.7.9(tag1700)",
                 "android",
