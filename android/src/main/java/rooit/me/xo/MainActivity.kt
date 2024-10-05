@@ -42,13 +42,20 @@ class MainActivity : AppCompatActivity() {
         }
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.root.setOnClickListener {
-        }
+        binding.root.setOnClickListener {}
         (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment)?.apply {
-            childFragmentManager.setFragmentResultListener(
-                FragmentResultRequestKey,
-                this
-            ) { requestkey, bundle ->
+            //Ref : https://stackoverflow.com/questions/51173002/how-to-change-start-destination-of-a-navigation-graph-programmatically
+            this.navController.apply {
+                navInflater.inflate(R.navigation.action_flow_navigation)?.let { flownavGraph ->
+                    flownavGraph.setStartDestination(R.id.flow_splash_init_fragment)
+                     graph = flownavGraph
+                }
+                navigate(
+                    R.id.flow_splash_init_fragment,
+                    bundleOf(TAG_FLOW_STEP to FlowStep.SPLASH.name)
+                )
+            }
+            childFragmentManager.setFragmentResultListener(FragmentResultRequestKey,this) { requestkey, bundle ->
                 if (requestkey == FragmentResultRequestKey) {
                     Timber.e("Show FragmentResult bundle $bundle")
                      bundle.getString(TAG_FLOW_STEP)?.let {flowstep->
@@ -56,26 +63,11 @@ class MainActivity : AppCompatActivity() {
                              navigateUp()
                              when(flowstep){
                                  FlowStep.MAIN.name->{
-                                     graph = this.navInflater.inflate(R.navigation.action_flow_navigation)
-                                         .apply {
-                                             setStartDestination(R.id.flow_main_fragment)
-                                         }
                                      navigate(R.id.flow_main_fragment, bundle)
                                  }
                              }
                          }
                      }
-                }
-            }
-//Ref : https://stackoverflow.com/questions/51173002/how-to-change-start-destination-of-a-navigation-graph-programmatically
-            this.navController?.let { nvc ->
-                nvc.navInflater.inflate(R.navigation.action_flow_navigation)?.let { navGraph ->
-                    navGraph.setStartDestination(R.id.flow_splash_init_fragment)
-                    nvc.graph = navGraph
-                nvc.navigate(
-                    R.id.flow_splash_init_fragment,
-                        bundleOf(TAG_FLOW_STEP to FlowStep.SPLASH.name)
-                    )
                 }
             }
         }
