@@ -1,0 +1,129 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+//    id 'kotlin-kapt'
+    alias libs.plugins.ksp.plugin
+    id "org.jetbrains.kotlin.plugin.serialization"
+    id "org.jetbrains.compose"
+//    id "org.jetbrains.kotlin.plugin.compose"
+    id "io.realm.kotlin"
+}
+
+apply plugin: "org.jetbrains.kotlin.plugin.compose"
+
+android {
+    compileSdk 35
+    lintOptions {
+        warningsAsErrors true
+        abortOnError true
+        disable 'MissingTranslation',
+                'ExtraTranslation',
+                'TypographyEllipsis',
+                'UnspecifiedImmutableFlag',
+                'UnusedResources',
+                'TypographyDashes'
+    }
+    buildFeatures {
+        viewBinding true
+        buildConfig true
+        compose false
+    }
+    namespace 'rooit.me.xo'
+    defaultConfig {
+        applicationId "rooit.me.xo"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+        buildConfigField("String", "BASE_URL", "\"https://newsapi.org/\"")
+        buildConfigField("String", "API_KEY", "\"f53a2c1085bd4e19859f4f3b07f2babf\"")
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        debug {
+            matchingFallbacks = ['release', 'debug']
+            minifyEnabled false
+            shrinkResources false
+            debuggable true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-system-common.pro', 'proguard-third-party.pro', 'proguard-module.pro'
+        }
+        release {
+            matchingFallbacks = ['release', 'debug']
+            minifyEnabled false
+            shrinkResources false
+            debuggable false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs += ['build/generated/ksp']
+        }
+    }
+
+//    ksp {
+//        arg( "GlideModule","com.bumptech.glide.integration.okhttp3.OkHttpLibraryGlideModule")
+//    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11.toString()
+        freeCompilerArgs = freeCompilerArgs + ['-Xexpect-actual-classes']
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.android.compose.compiler.get()
+    }
+}
+
+dependencies {
+    implementation libs.kotlinx.serialization
+    implementation libs.kotlinx.serialization.json
+    implementation libs.kotlinx.coroutines
+    implementation libs.koin.core
+    implementation libs.koin.android
+    implementation  libs.timber
+
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.activity.ktx
+    implementation libs.androidx.fragment.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.material
+    implementation libs.androidx.constraintlayout
+    implementation libs.androidx.lifecycle.livedata.ktx
+    implementation libs.androidx.lifecycle.viewmodel.ktx
+    implementation libs.androidx.navigation.fragment.ktx
+    implementation libs.androidx.navigation.ui.ktx
+    implementation libs.androidx.splashscreen
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
+
+    implementation platform(libs.androidx.compose.bom)
+    implementation libs.androidx.ui.graphics
+    implementation libs.androidx.compose.material3
+
+
+    implementation  libs.retrofit2
+    implementation libs.retrofit2.converter.kotlinx.serialization
+
+    implementation libs.okhttp
+    implementation libs.okhttp.interceptor.logging
+
+    //https://medium.com/@jonathan.mercandalli_41381/move-from-kapt-to-ksp-in-glide-on-android-dc786cab2584
+    //https://github.com/google/ksp/issues/1333#issuecomment-1620079337
+    implementation libs.glide
+//    kapt libs.glide.compiler
+    ksp libs.glide.ksp
+
+    implementation  libs.realm.kotlin.base
+//    implementation libs.realm.kotlin.sync
+
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
+}
