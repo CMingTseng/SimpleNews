@@ -1,0 +1,11 @@
+<resources>
+    <item name="nav_flow_graph" type="id"/>
+    <item name="action_flow_splash" type="id"/>
+    <item name="flow_splash_init_fragment" type="id"/>
+    <item name="flow_main_fragment" type="id"/>
+    <item name="action_flow_main" type="id"/>
+    <item name="splash_graph" type="id"/>
+    <item name="splash_step1" type="id"/>
+    <item name="mobile_navigation" type="id"/>
+    <item name="navigation_news" type="id"/>
+</resources>

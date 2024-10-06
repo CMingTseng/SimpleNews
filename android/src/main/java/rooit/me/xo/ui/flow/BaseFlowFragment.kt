@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 import rooit.me.xo.utils.fragment.FragmentResultRequestKey
 
 abstract class BaseFlowFragment(
@@ -30,7 +31,7 @@ abstract class BaseFlowFragment(
                 }
             }
             navHostFragment = this
-            navcontroller = navController
+            navcontroller = findNavController(this)
             childFragmentManager.setFragmentResultListener(
                 FragmentResultRequestKey,
                 this
