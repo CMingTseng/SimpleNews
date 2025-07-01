@@ -7,10 +7,10 @@ import rooit.me.xo.route.Route
 class XmlNavigationBuilder : NavigationBuilder {
     override fun build(
         navController: NavController,
-        graphResId: Int,
-        startDestId: Route
+        startDestId: Route,
+        graphResId: Int?,
     ): NavGraph {
-        val navGraph = navController.navInflater.inflate(graphResId)
+        val navGraph = navController.navInflater.inflate(graphResId!!)
         navGraph.setStartDestination(startDestId.id)
         return navGraph
     }

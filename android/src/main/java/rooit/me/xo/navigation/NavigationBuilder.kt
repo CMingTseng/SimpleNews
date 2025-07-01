@@ -6,5 +6,5 @@ import androidx.navigation.NavGraph
 import rooit.me.xo.route.Route
 
 interface NavigationBuilder {
-    fun build(navController: NavController, @NavigationRes graphResId: Int, startDestId: Route): NavGraph
+    fun build(navController: NavController, startDestId: Route, @NavigationRes graphResId: Int?=null): NavGraph
 }
