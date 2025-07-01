@@ -16,6 +16,7 @@ import rooit.me.xo.ui.flow.TAG_FLOW_STEP
 import rooit.me.xo.utils.fragment.FragmentResultRequestKey
 import timber.log.Timber
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import rooit.me.xo.navigation.NavigationProvider
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -45,9 +46,11 @@ class MainActivity : AppCompatActivity() {
         (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as? NavHostFragment)?.apply {
             //Ref : https://stackoverflow.com/questions/51173002/how-to-change-start-destination-of-a-navigation-graph-programmatically
             this.navController.let { nvc ->
-                val navGraph =nvc.navInflater.inflate(R.navigation.navi_action_flow).apply {
-                   setStartDestination(R.id.flow_splash_init_fragment)
-                }
+                val navGraph = NavigationProvider.getBuilder().build(
+                    nvc,
+                    R.navigation.navi_action_flow,
+                    R.id.flow_splash_init_fragment
+                )
                 nvc.graph = navGraph
                 nvc.navigate(
                     R.id.flow_splash_init_fragment,
