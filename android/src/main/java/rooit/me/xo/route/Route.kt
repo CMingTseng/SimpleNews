@@ -5,7 +5,7 @@ import rooit.me.xo.R
 
 sealed class Route(@IdRes val id: Int, val routeName: String) {
     data object FlowSplash : Route(R.id.flow_splash_init_fragment, "FlowSplash")
-    data object FlowNEws : Route(R.id.flow_main_fragment, "FlowNews")
+    data object FlowNews : Route(R.id.flow_main_fragment, "FlowNews")
     data object Splash : Route(R.id.splash_step1, "PageSplash")
 
     data object News : Route(R.id.navigation_news, "PageLogin")

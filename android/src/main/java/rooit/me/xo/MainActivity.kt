@@ -67,11 +67,11 @@ class MainActivity : AppCompatActivity() {
                             navigateUp()
                             when (flowstep) {
                                 FlowStep.MAIN.name -> {
-                                    graph =
-                                        this.navInflater.inflate(R.navigation.navi_action_flow)
-                                            .apply {
-                                                setStartDestination(R.id.flow_main_fragment)
-                                            }
+                                    graph = NavigationProvider.getBuilder().build(
+                                        this,
+                                        R.navigation.navi_action_flow,
+                                        Route.FlowNews
+                                    )
                                     navigate(R.id.flow_main_fragment, bundle)
                                 }
                             }
@@ -79,7 +79,6 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-
         }
         applicationContext
     }
