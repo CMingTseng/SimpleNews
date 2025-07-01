@@ -1,0 +1,293 @@
+[versions]
+#region Base Plugin
+agp = "8.10.1" # Ref : https://developer.android.com/build/releases/past-releases
+kotlin = "2.0.20"
+kotlinx-coroutines = "1.9.0"
+ksp = "2.0.20-1.0.25"
+#endregion
+
+#region AndroidX
+androidx-core-ktx = "1.13.1"
+androidx-activity-ktx = "1.9.2"
+androidx-appcompat= "1.7.0"
+androidx-fragment = "1.8.4"
+androidx-cardview = "1.0.0"
+androidx-material = "1.12.0"
+androidx-constraintlayout = "2.1.4"
+androidx-lifecycle = "2.8.6"
+lifecycleLivedataKtx = "2.8.6"
+lifecycleViewmodelKtx = "2.8.6"
+lifecycleRuntimeKtx = "2.8.6"
+androidx-navigation = "2.8.2"
+navigationFragmentKtx = "2.8.2"
+navigationUiKtx = "2.8.2"
+androidx-splashscreen = "1.0.1"
+androidx-pagging = "3.3.2"
+jetpack_windowmanager_version = '1.0.0'
+jetpack_camera_version = '1.1.0'
+#endregion
+
+#region compose
+androidx-activity-compose = "1.8.2"
+android-compose-compiler = "1.5.15"#https://developer.android.com/jetpack/androidx/releases/compose-kotlin
+compose-bom = "2025.06.01"# Ref : https://developer.android.com/jetpack/compose/bom
+androidx-compose = "1.8.3"
+androidx-compose-material3 = "1.3.2"
+androidx-compose-material3-adaptive = "1.1.0"
+jetbrains-compose-multiplatform = "1.6.11"
+jetbrains-compose-hot-reload = "1.0.0-alpha10"
+jetbrains-navigation = "2.8.0-alpha13"
+#endregion
+
+#region Third party
+
+#region DI
+koin = "4.0.0"
+koin-jb-compose= "1.1.2"#next version is 3.6.0!!
+#endregion
+
+#region Json &  Gson & Serialization
+kotlinx-serialization = "1.7.3"
+#endregion
+
+#region Net
+ktor = "2.3.8"
+
+ktorfit = "1.12.0"
+retrofit2 = "2.9.0"
+retrofit2_kotlinx_serialization_converter = "1.0.0"
+okhttp = "4.12.0"
+#endregion
+
+#region Permissions
+moko-permissions-version= "0.17.0"
+#endregion
+
+#region Page
+pagingCommon = "3.1.1-0.3.1"
+pagingComposeCommon = "3.3.0-alpha02-0.5.1"
+#endregion
+
+#region Image
+coil = "3.0.0-alpha01"
+kamelImage = "0.9.0"
+glide = "4.12.0"
+#endregion
+
+#region I18N and L10N
+lyricist_version = "1.6.2"
+skeptick_libres_version = "1.2.2"
+#endregion
+
+#region Log
+timber = "5.0.1"
+napier_version = "2.6.1"
+#endregion
+
+#region DB
+room_version= "2.6.1"
+realm_version= "10.11.1"
+realm_kotlin_version= "3.0.0"#FIXME WTF
+sqldelight_version = '2.0.1'#1.5.5
+#endregion
+
+okio = "3.8.0"
+precompose-version="1.5.10"
+moleculeRuntime = "1.3.1"
+
+composeView = "1.5.10.3"
+settings = "1.3.0"
+datetime = "0.7.0"
+
+#endregion
+
+junit = "4.13.2"
+junitVersion = "1.2.1"
+test_runner_version = "1.5.2"
+espressoCore = "3.6.1"
+
+[plugins]
+android_application = { id = "com.android.application", version.ref = "agp" }
+android_library = { id = "com.android.library", version.ref = "agp" }
+kotlin_jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin_android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin_multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin_serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "jetbrains-compose-multiplatform" }
+i18n_skeptick_libres = { id = "io.github.skeptick.libres", version = "1.2.2" }
+de-ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
+realm = { id = "io.realm:realm-gradle-plugin", version.ref = "realm_version" }
+realm_kotlin = { id = "io.realm.kotlin", version.ref = "realm_kotlin_version" }
+
+[libraries]
+plugin-source-android = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+plugin-source-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+
+#region Base
+kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref="kotlinx-coroutines" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref="kotlinx-coroutines" }
+kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
+
+kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
+#endregion
+
+#region androidX
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "androidx-core-ktx" }
+androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "androidx-activity-ktx" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidx-appcompat" }
+androidx-fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "androidx-fragment" }
+material = { group = "com.google.android.material", name = "material", version.ref = "androidx-material" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "androidx-constraintlayout" }
+androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
+androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "androidx-navigation" }
+androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "androidx-navigation" }
+paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "androidx-pagging" }
+splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidx-splashscreen" }
+#endregion
+
+#region compose
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidx-activity-compose" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose-bom" }
+androidx-lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidx-lifecycle" }
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidx-navigation" }
+androidx-compose-ui = { group = "androidx.compose.ui", name = "ui" }
+androidx-compose-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
+androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
+androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
+androidx-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "androidx-compose-material3" }
+androidx-compose-material3-window-size = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "androidx-compose-material3" }
+androidx-compose-material3-adaptive-adaptive = { module = "androidx.compose.material3.adaptive:adaptive", version.ref = "androidx-compose-material3-adaptive" }
+androidx-compose-material3-adaptive-layout = { module = "androidx.compose.material3.adaptive:adaptive-layout", version.ref = "androidx-compose-material3-adaptive" }
+androidx-compose-material3-adaptive-navigation = { module = "androidx.compose.material3.adaptive:adaptive-navigation", version.ref = "androidx-compose-material3-adaptive" }
+androidx-compose-foundation = { module = "androidx.compose.foundation:foundation", version.ref = "androidx-compose" }
+androidx-compose-foundation-layout = { module = "androidx.compose.foundation:foundation-layout", version.ref = "androidx-compose" }
+androidx-compose-material = { module = "androidx.compose.material:material", version.ref = "androidx-compose" }
+androidx-compose-material-icons-core = { module = "androidx.compose.material:material-icons-core", version  = "1.7.8" }
+androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version  = "1.7.8" }
+
+
+precompose = { module = "moe.tlaster:precompose", version.ref = "precompose-version" }
+precompose-molecule = { module = "moe.tlaster:precompose-molecule", version.ref = "precompose-version" }
+precompose-viewmodel = { module = "moe.tlaster:precompose-viewmodel", version.ref = "precompose-version" }
+precompose-koin={module="moe.tlaster:precompose-koin",version.ref="precompose-version"}
+#endregion
+
+#region Third_Party
+
+#region net
+
+
+# Ref :https://mvnrepository.com/artifact/de.jensklingenberg.ktorfit?p=2
+de-ktorfit = { module = "de.jensklingenberg.ktorfit:ktorfit-lib", version.ref = "ktorfit" }
+de-ktorfit-light = { module = "de.jensklingenberg.ktorfit:ktorfit-lib-light", version.ref = "ktorfit" }
+de-ktorfit-ksp = { module = "de.jensklingenberg.ktorfit:ktorfit-ksp", version.ref = "ktorfit" }
+
+okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
+
+ktor-core = {  module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-jvm = { module = "io.ktor:ktor-client-okhttp-jvm", version.ref = "ktor" }
+ktor-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktor-android = { module = "io.ktor:ktor-client-android", version.ref = "ktor" }
+ktor-ios = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
+ktor-json = { module = "io.ktor:ktor-client-json", version.ref="ktor" }
+ktor-logging = { module = "io.ktor:ktor-client-logging", version.ref="ktor" }
+ktor-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
+ktor-jsonjs = { module = "io.ktor:ktor-client-json-js", version = "3.2.0" }
+ktor-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref="ktor" }
+ktor-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref="ktor" }
+
+ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor" }
+ktor-server-netty = { module = "io.ktor:ktor-server-netty-jvm", version.ref = "ktor" }
+ktor-server-tests = { module = "io.ktor:ktor-server-tests-jvm", version.ref = "ktor" }
+
+retrofit2 = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit2" }
+retrofit2-converter-gson= { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit2" }
+retrofit2-converter-scalars= { group = "com.squareup.retrofit2", name = "converter-scalars", version.ref = "retrofit2" }
+retrofit2-converter-kotlinx-serialization= { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2_kotlinx_serialization_converter" }
+
+okhttp= { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+okhttp-interceptor-logging= { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+#endregion
+
+#region Page
+paging-common = { module = "app.cash.paging:paging-common", version.ref = "pagingCommon" }
+paging-compose-common = { module = "app.cash.paging:paging-compose-common", version.ref = "pagingComposeCommon" }
+#endregion
+
+#region DI
+koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
+koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koin" }
+koin-core-coroutines  = { module = "io.insert-koin:koin-core-coroutines", version.ref = "koin" }
+koin-android  = { module = "io.insert-koin:koin-android", version.ref = "koin" }
+koin-android-compat = { module = "io.insert-koin:koin-android-compat", version.ref = "koin" }
+koin-androidx-workmanager  = { module = "io.insert-koin:koin-androidx-workmanager", version.ref = "koin" }
+koin-androidx-navigation  = { module = "io.insert-koin:koin-androidx-navigation", version.ref = "koin" }
+
+koin-androidx-compose  = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
+koin-androidx-compose-navigation  = { module = "io.insert-koin:koin-androidx-compose-navigation", version.ref = "koin" }
+
+koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
+
+koin-jb-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin-jb-compose" }
+#endregion
+
+#region Permissions
+moko_permissions = { module = "dev.icerock.moko:permission", version.ref = "moko-permissions-version" }
+moko_permissions-compose = { module = "dev.icerock.moko:permissions-compose", version.ref = "moko-permissions-version" }
+moko_permissions-test = { module = "dev.icerock.moko:permissions-test", version.ref = "moko-permissions-version" }
+#endregion
+
+#region Image
+coil = { module = "io.coil-kt:coil", version.ref = "coil" }
+image = { module = "media.kamel:kamel-image", version.ref = "kamelImage" }
+imageLoader = { module = "io.github.qdsfdhvh:image-loader", version="1.10.0" }
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+glide-compiler= { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
+#endregion
+
+#region i18n_String  ##TODO compose 1.6.0 will new support i18n
+lyricist = { module = "cafe.adriel.lyricist:lyricist", version.ref = "lyricist_version" }
+lyricist-processor = { module = "cafe.adriel.lyricist:lyricist-processor", version.ref = "lyricist_version" }
+lyricist-processorXml = { module = "cafe.adriel.lyricist:lyricist-processor-xml", version.ref = "lyricist_version" }
+
+i18n_skeptick_libres = { module = "io.github.skeptick.libres:libres-compose", version.ref  = "skeptick_libres_version" }
+#endregion
+
+#region DB
+realm_kotlin_base= { group = "io.realm.kotlin", name = "library-base", version.ref = "realm_kotlin_version" }
+realm_kotlin_sync= { group = "io.realm.kotlin", name = "library-sync", version.ref = "realm_kotlin_version" }
+
+sqlDelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqldelight_version" }
+sqlDelight-adapter = { module = "app.cash.sqldelight:primitive-adapters", version.ref = "sqldelight_version" }
+sqlDelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight_version" }
+sqlDelight-driver-native = { module = "app.cash.sqldelight:native-driver", version.ref = "sqldelight_version" }
+sqlDelight-driver-sqlite = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight_version" }
+#endregion
+
+#region Log
+log = { module = "io.github.aakira:napier", version.ref = "napier_version" }
+timber= { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+#endregion
+
+molecule-runtime = { module = "app.cash.molecule:molecule-runtime", version.ref = "moleculeRuntime" }
+
+composeView = { module = "io.github.ltttttttttttt:ComposeViews", version.ref = "composeView" }
+
+stately = { module = "co.touchlab:stately-common", version="2.1.0" }
+skiko = { module = "org.jetbrains.skiko:skiko-awt-runtime-macos-arm64", version="0.9.17" }
+
+settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "settings" }
+datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
+#endregion
+
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-test-runner = { group = "'androidx.test'", name = "runner", version.ref = "test_runner_version" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+androidx-ui-compose-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
+androidx-ui-compose-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }

@@ -1,0 +1,108 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+    id "org.jetbrains.kotlin.plugin.serialization"
+    id "io.realm.kotlin"
+}
+
+android {
+    compileSdk 36
+    lintOptions {
+        warningsAsErrors true
+        abortOnError true
+        disable 'MissingTranslation',
+                'ExtraTranslation',
+                'TypographyEllipsis',
+                'UnspecifiedImmutableFlag',
+                'UnusedResources',
+                'TypographyDashes'
+    }
+
+    buildFeatures {
+        viewBinding true
+        buildConfig true
+        compose false
+    }
+
+    namespace 'rooit.me.xo'
+    defaultConfig {
+        applicationId "rooit.me.xo"
+        minSdk 21
+        targetSdk 36
+        versionCode 1
+        versionName "1.0"
+        buildConfigField("String", "BASE_URL", "\"https://newsapi.org/\"")
+        buildConfigField("String", "API_KEY", "\"f53a2c1085bd4e19859f4f3b07f2babf\"")
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        debug {
+            matchingFallbacks = ['release', 'debug']
+            minifyEnabled false
+            shrinkResources false
+            debuggable true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-system-common.pro', 'proguard-third-party.pro', 'proguard-module.pro'
+        }
+        release {
+            matchingFallbacks = ['release', 'debug']
+            minifyEnabled false
+            shrinkResources false
+            debuggable false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+}
+
+dependencies {
+    implementation libs.kotlinx.serialization
+    implementation libs.kotlinx.serialization.json
+    implementation libs.kotlinx.coroutines
+
+
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.androidx.activity.ktx
+    implementation libs.androidx.fragment.ktx
+    implementation libs.material
+
+    implementation libs.androidx.constraintlayout
+
+    implementation libs.androidx.lifecycle.livedata.ktx
+    implementation libs.androidx.lifecycle.viewmodel.ktx
+    implementation libs.androidx.navigation.fragment.ktx
+    implementation libs.androidx.navigation.ui.ktx
+    implementation libs.splashscreen
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
+
+    implementation  libs.timber
+
+    implementation libs.koin.core
+    implementation libs.koin.android
+
+    implementation libs.retrofit2
+
+    implementation libs.retrofit2.converter.kotlinx.serialization
+    implementation libs.okhttp
+    implementation libs.okhttp.interceptor.logging
+    implementation libs.glide
+    kapt libs.glide.compiler
+//    ksp libs.glide.ksp
+
+    implementation libs.realm.kotlin.base
+//    implementation libs.realm.kotlin.sync
+
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
+}

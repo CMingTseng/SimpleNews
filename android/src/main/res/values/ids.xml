@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="PageSplash"/>
+    <item type="id" name="PageLogin"/>
+    <item type="id" name="PageMain"/>
+    <item type="id" name="PageNews"/>
+</resources>
