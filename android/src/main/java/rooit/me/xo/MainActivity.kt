@@ -16,6 +16,7 @@ import rooit.me.xo.ui.flow.TAG_FLOW_STEP
 import rooit.me.xo.utils.fragment.FragmentResultRequestKey
 import timber.log.Timber
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.findNavController
 import rooit.me.xo.navigation.NavigationProvider
 import rooit.me.xo.route.Route
 
@@ -49,13 +50,17 @@ class MainActivity : AppCompatActivity() {
             this.navController.let { nvc ->
                 val navGraph = NavigationProvider.getBuilder().build(
                     nvc,
-                    R.navigation.navi_action_flow,
-                    Route.FlowSplash
+                    R.navigation.navi_splash,
+                    Route.Splash
                 )
                 nvc.graph = navGraph
+                val args=bundleOf(TAG_FLOW_STEP to FlowStep.SPLASH.name)
+                intent?.extras?.let { bundle->
+                    args.putAll(bundle)
+                }
                 nvc.navigate(
-                    Route.FlowSplash.id,
-                    bundleOf(TAG_FLOW_STEP to FlowStep.SPLASH.name)
+                    Route.Splash.id,
+                    args
                 )
             }
 
@@ -69,10 +74,10 @@ class MainActivity : AppCompatActivity() {
                                 FlowStep.MAIN.name -> {
                                     graph = NavigationProvider.getBuilder().build(
                                         this,
-                                        R.navigation.navi_action_flow,
-                                        Route.FlowNews
+                                        R.navigation.navi_news,
+                                        Route.News
                                     )
-                                    navigate(R.id.flow_main_fragment, bundle)
+                                    navigate(Route.News.id, bundle)
                                 }
                             }
                         }
