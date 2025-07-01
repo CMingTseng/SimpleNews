@@ -50,12 +50,12 @@ class MainActivity : AppCompatActivity() {
             this.navController.let { nvc ->
                 val navGraph = NavigationProvider.getBuilder().build(
                     nvc,
+                    Route.Splash,
                     R.navigation.navi_splash,
-                    Route.Splash
                 )
                 nvc.graph = navGraph
-                val args=bundleOf(TAG_FLOW_STEP to FlowStep.SPLASH.name)
-                intent?.extras?.let { bundle->
+                val args = bundleOf(TAG_FLOW_STEP to FlowStep.SPLASH.name)
+                intent?.extras?.let { bundle ->
                     args.putAll(bundle)
                 }
                 nvc.navigate(
@@ -64,7 +64,10 @@ class MainActivity : AppCompatActivity() {
                 )
             }
 
-            childFragmentManager.setFragmentResultListener(FragmentResultRequestKey,this) { requestkey, bundle ->
+            childFragmentManager.setFragmentResultListener(
+                FragmentResultRequestKey,
+                this
+            ) { requestkey, bundle ->
                 if (requestkey == FragmentResultRequestKey) {
                     Timber.e("Show FragmentResult bundle $bundle")
                     bundle.getString(TAG_FLOW_STEP)?.let { flowstep ->
@@ -74,8 +77,8 @@ class MainActivity : AppCompatActivity() {
                                 FlowStep.MAIN.name -> {
                                     graph = NavigationProvider.getBuilder().build(
                                         this,
+                                        Route.News,
                                         R.navigation.navi_news,
-                                        Route.News
                                     )
                                     navigate(Route.News.id, bundle)
                                 }
