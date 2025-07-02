@@ -17,8 +17,11 @@ import rooit.me.xo.utils.fragment.FragmentResultRequestKey
 import timber.log.Timber
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.findNavController
+import androidx.navigation.navOptions
 import rooit.me.xo.navigation.NavigationProvider
 import rooit.me.xo.route.Route
+import rooit.me.xo.route.Route.Companion.LOGIN_REQUEST_KEY
+import rooit.me.xo.route.Route.Companion.SPLASH_REQUEST_KEY
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -48,40 +51,43 @@ class MainActivity : AppCompatActivity() {
         (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as? NavHostFragment)?.apply {
             //Ref : https://stackoverflow.com/questions/51173002/how-to-change-start-destination-of-a-navigation-graph-programmatically
             this.navController.let { nvc ->
-                val navGraph = NavigationProvider.getBuilder().build(
-                    nvc,
-                    Route.Splash,
-                    R.navigation.navi_splash,
-                )
-                nvc.graph = navGraph
-                val args = bundleOf(TAG_FLOW_STEP to FlowStep.SPLASH.name)
-                intent?.extras?.let { bundle ->
-                    args.putAll(bundle)
+                if (savedInstanceState == null) {
+                    nvc.graph = NavigationProvider.getBuilder().build(nvc,Route.Splash,R.navigation.navi_splash)
+                    val args = bundleOf(TAG_FLOW_STEP to FlowStep.SPLASH.name)
+                    intent?.extras?.let { bundle ->
+                        args.putAll(bundle)
+                    }
+                    nvc.navigate(Route.Splash.id,args,navOptions {popUpTo(Route.Splash.id) {inclusive = true}})
                 }
-                nvc.navigate(
-                    Route.Splash.id,
-                    args
-                )
             }
 
-            childFragmentManager.setFragmentResultListener(
-                FragmentResultRequestKey,
-                this
-            ) { requestkey, bundle ->
-                if (requestkey == FragmentResultRequestKey) {
-                    Timber.e("Show FragmentResult bundle $bundle")
-                    bundle.getString(TAG_FLOW_STEP)?.let { flowstep ->
-                        this.navController?.apply {
-                            navigateUp()
-                            when (flowstep) {
-                                FlowStep.MAIN.name -> {
-                                    graph = NavigationProvider.getBuilder().build(
-                                        this,
-                                        Route.News,
-                                        R.navigation.navi_news,
-                                    )
-                                    navigate(Route.News.id, bundle)
-                                }
+            childFragmentManager.setFragmentResultListener(SPLASH_REQUEST_KEY,this) { requestkey, bundle ->
+                bundle.getString(TAG_FLOW_STEP)?.let { flowstep ->
+                    this.navController?.apply {
+                        when (flowstep) {
+                            FlowStep.MAIN.name -> {
+                                graph = NavigationProvider.getBuilder().build(this,Route.News,R.navigation.navi_news,)
+                                navigate(Route.News.id, bundle)
+                            }
+
+                            FlowStep.LOGIN_SIGNUP.name -> {
+                                graph = NavigationProvider.getBuilder().build(this,Route.Login,
+                                    R.navigation.navi_login,
+                                )
+                                navigate(Route.Login.id, bundle,navOptions {popUpTo(Route.Login.id) { inclusive = true}})
+                            }
+                        }
+                    }
+                }
+            }
+
+            childFragmentManager.setFragmentResultListener(LOGIN_REQUEST_KEY,this) { requestkey, bundle ->
+                bundle.getString(TAG_FLOW_STEP)?.let { flowstep ->
+                    this.navController?.apply {
+                        when (flowstep) {
+                            FlowStep.MAIN.name -> {
+                                graph = NavigationProvider.getBuilder().build(this,Route.News,R.navigation.navi_news,)
+                                navigate(Route.News.id, bundle)
                             }
                         }
                     }
@@ -89,6 +95,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
         applicationContext
+    }
+
+    private fun switchToNormalGraph(startArgs: Bundle? = null) {
+        val navController = findNavController(R.id.nav_host_fragment)
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

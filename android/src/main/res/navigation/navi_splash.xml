@@ -1,23 +1,13 @@
-<?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/splash_graph"
     app:startDestination="@+id/splash_step1">
+
     <fragment
         android:id="@+id/splash_step1"
         android:name="rooit.me.xo.ui.splash.PageSplash"
-        android:label="splash_step1"
-        tools:layout="@layout/fragment_splash" >
-        <action
-            android:id="@+id/action_Splash_to_Login"
-            app:destination="@id/PageLogin"
-            app:popUpTo="@id/PageSplash"
-            app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/action_Splash_to_Main"
-            app:destination="@id/PageMain"
-            app:popUpTo="@id/PageSplash"
-            app:popUpToInclusive="true" />
-    </fragment>
+        android:label="PageSplash"
+        tools:layout="@layout/fragment_splash" />
+
 </navigation>

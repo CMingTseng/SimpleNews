@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResult
 import androidx.lifecycle.ViewModelProvider
 import rooit.me.xo.databinding.FragmentSplashBinding
+import rooit.me.xo.route.Route.Companion.SPLASH_REQUEST_KEY
 import rooit.me.xo.ui.flow.FlowStep
 import rooit.me.xo.ui.flow.TAG_FLOW_STEP
 import rooit.me.xo.utils.fragment.FragmentResultRequestKey
@@ -32,11 +33,19 @@ class PageSplash : Fragment() {
         vm.text.observe(viewLifecycleOwner) {
             binding.textHome.text = it
         }
-        binding.textHome.setOnClickListener {
+
+        binding.btLogin.setOnClickListener {
+            arguments?.let {
+                it.putString(TAG_SPLASH_STEP,SplashStep.SPLASH_FINISH.name)
+                it.putString(TAG_FLOW_STEP, FlowStep.LOGIN_SIGNUP.name)
+                setFragmentResult(SPLASH_REQUEST_KEY, it)
+            }
+        }
+        binding.btNormal.setOnClickListener {
             arguments?.let {
                 it.putString(TAG_SPLASH_STEP,SplashStep.SPLASH_FINISH.name)
                 it.putString(TAG_FLOW_STEP, FlowStep.MAIN.name)
-                setFragmentResult(FragmentResultRequestKey, it)
+                setFragmentResult(SPLASH_REQUEST_KEY, it)
             }
         }
         return binding.root

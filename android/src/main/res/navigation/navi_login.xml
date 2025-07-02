@@ -1,0 +1,35 @@
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login_graph"
+    app:startDestination="@+id/login_step1">
+
+    <fragment
+        android:id="@+id/login_step1"
+        android:name="rooit.me.xo.ui.login.PageLogin"
+        android:label="PageLogin"
+        tools:layout="@layout/page_login" >
+        <!-- 這個 action 是在 login_graph 內部導航時使用 -->
+        <!-- 例如，登入成功後跳轉到新聞頁面，並清除登入頁面的返回紀錄 -->
+        <!-- 透過將 destination 指向另一個 navigation graph 的 ID，實現圖之間的跳轉 -->
+        <action
+            android:id="@+id/action_Login_to_News"
+            app:destination="@id/news_graph"
+            app:popUpTo="@id/login_step1"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <!-- 為了讓 action 可以跳轉，我們需要在此處 "include" 或定義目標 -->
+    <!-- 這裡使用一個 navigation 節點作為目標，它指向新聞頁面的圖 -->
+    <!--    <navigation-->
+    <!--        android:id="@+id/news_graph"-->
+    <!--        app:startDestination="@id/news_page">-->
+    <!--        <fragment-->
+    <!--            android:id="@+id/news_page"-->
+    <!--            android:name="rooit.me.xo.ui.news.PageNews"-->
+    <!--            android:label="@string/title_news"-->
+    <!--            tools:layout="@layout/fragment_news" />-->
+    <!--    </navigation>-->
+    <include app:graph="@navigation/navi_news" />
+
+</navigation>
