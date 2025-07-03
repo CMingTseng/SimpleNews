@@ -9,11 +9,8 @@
         android:name="rooit.me.xo.ui.login.PageLogin"
         android:label="PageLogin"
         tools:layout="@layout/page_login" >
-        <!-- 這個 action 是在 login_graph 內部導航時使用 -->
-        <!-- 例如，登入成功後跳轉到新聞頁面，並清除登入頁面的返回紀錄 -->
-        <!-- 透過將 destination 指向另一個 navigation graph 的 ID，實現圖之間的跳轉 -->
         <action
-            android:id="@+id/action_Login_to_News"
+            android:id="@id/action_Login_to_News"
             app:destination="@id/news_graph"
             app:popUpTo="@id/login_step1"
             app:popUpToInclusive="true" />

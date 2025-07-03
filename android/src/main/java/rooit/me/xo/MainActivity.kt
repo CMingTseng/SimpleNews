@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import android.view.Window
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -13,15 +14,13 @@ import androidx.navigation.fragment.NavHostFragment
 import rooit.me.xo.databinding.ActivityMainBinding
 import rooit.me.xo.ui.flow.FlowStep
 import rooit.me.xo.ui.flow.TAG_FLOW_STEP
-import rooit.me.xo.utils.fragment.FragmentResultRequestKey
-import timber.log.Timber
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.findNavController
-import androidx.navigation.navOptions
 import rooit.me.xo.navigation.NavigationProvider
 import rooit.me.xo.route.Route
 import rooit.me.xo.route.Route.Companion.LOGIN_REQUEST_KEY
 import rooit.me.xo.route.Route.Companion.SPLASH_REQUEST_KEY
+import rooit.me.xo.ui.splash.TAG_SPLASH_STEP
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -49,58 +48,57 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as? NavHostFragment)?.apply {
-            //Ref : https://stackoverflow.com/questions/51173002/how-to-change-start-destination-of-a-navigation-graph-programmatically
             this.navController.let { nvc ->
                 if (savedInstanceState == null) {
-                    nvc.graph = NavigationProvider.getBuilder().build(nvc,Route.Splash,R.navigation.navi_splash)
+                    nvc.graph = NavigationProvider.getBuilder().build(nvc, Route.Splash)
                     val args = bundleOf(TAG_FLOW_STEP to FlowStep.SPLASH.name)
                     intent?.extras?.let { bundle ->
                         args.putAll(bundle)
                     }
-                    nvc.navigate(Route.Splash.id,args,navOptions {popUpTo(Route.Splash.id) {inclusive = true}})
                 }
             }
 
             childFragmentManager.setFragmentResultListener(SPLASH_REQUEST_KEY,this) { requestkey, bundle ->
                 bundle.getString(TAG_FLOW_STEP)?.let { flowstep ->
-                    this.navController?.apply {
-                        when (flowstep) {
-                            FlowStep.MAIN.name -> {
-                                graph = NavigationProvider.getBuilder().build(this,Route.News,R.navigation.navi_news,)
-                                navigate(Route.News.id, bundle)
-                            }
-
-                            FlowStep.LOGIN_SIGNUP.name -> {
-                                graph = NavigationProvider.getBuilder().build(this,Route.Login,
-                                    R.navigation.navi_login,
-                                )
-                                navigate(Route.Login.id, bundle,navOptions {popUpTo(Route.Login.id) { inclusive = true}})
-                            }
-                        }
-                    }
+                    switchToNormalGraph(bundle)
                 }
             }
 
             childFragmentManager.setFragmentResultListener(LOGIN_REQUEST_KEY,this) { requestkey, bundle ->
                 bundle.getString(TAG_FLOW_STEP)?.let { flowstep ->
-                    this.navController?.apply {
-                        when (flowstep) {
-                            FlowStep.MAIN.name -> {
-                                graph = NavigationProvider.getBuilder().build(this,Route.News,R.navigation.navi_news,)
-                                navigate(Route.News.id, bundle)
-                            }
-                        }
-                    }
+                    switchToNormalGraph(bundle)
                 }
             }
         }
         applicationContext
     }
 
-    private fun switchToNormalGraph(startArgs: Bundle? = null) {
-        val navController = findNavController(R.id.nav_host_fragment)
+    private fun switchToNormalGraph(bundle: Bundle? = null) {
+        bundle?.let { args ->
+            findNavController(R.id.nav_host_fragment)?.let { navController ->
+                if (args.getString(TAG_SPLASH_STEP).isNullOrEmpty()) {
+                    args.getString(TAG_FLOW_STEP)?.let { flowstep ->
+                        when (flowstep) {
+                            FlowStep.MAIN.name -> {
+                                navController.navigate(R.id.action_Login_to_News)
+                            }
+                        }
+                    }
+                } else {
+                    args.getString(TAG_FLOW_STEP)?.let { flowstep ->
+                        when (flowstep) {
+                            FlowStep.MAIN.name -> {
+                                navController.navigate(R.id.action_Splash_to_Main)
+                            }
 
-
+                            FlowStep.LOGIN_SIGNUP.name -> {
+                                navController.navigate(R.id.action_Splash_to_Login)
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
