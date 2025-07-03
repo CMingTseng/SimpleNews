@@ -15,7 +15,9 @@ import rooit.me.xo.databinding.ActivityMainBinding
 import rooit.me.xo.ui.flow.FlowStep
 import rooit.me.xo.ui.flow.TAG_FLOW_STEP
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
+import androidx.navigation.navOptions
 import rooit.me.xo.navigation.NavigationProvider
 import rooit.me.xo.route.Route
 import rooit.me.xo.route.Route.Companion.LOGIN_REQUEST_KEY
@@ -59,41 +61,37 @@ class MainActivity : AppCompatActivity() {
             }
 
             childFragmentManager.setFragmentResultListener(SPLASH_REQUEST_KEY,this) { requestkey, bundle ->
-                bundle.getString(TAG_FLOW_STEP)?.let { flowstep ->
-                    switchToNormalGraph(bundle)
+                bundle.remove(TAG_SPLASH_STEP)
+                val options=navOptions {
+                    popUpTo(Route.Splash.id) {
+                        inclusive = true
+                    }
                 }
+                switchDestination(bundle,options)
             }
 
             childFragmentManager.setFragmentResultListener(LOGIN_REQUEST_KEY,this) { requestkey, bundle ->
-                bundle.getString(TAG_FLOW_STEP)?.let { flowstep ->
-                    switchToNormalGraph(bundle)
+                val options=navOptions {
+                    popUpTo(Route.Login.id) {
+                        inclusive = true
+                    }
                 }
+                switchDestination(bundle,options)
             }
         }
         applicationContext
     }
-
-    private fun switchToNormalGraph(bundle: Bundle? = null) {
+    private fun switchDestination(bundle: Bundle? = null,option: NavOptions?) {
         bundle?.let { args ->
             findNavController(R.id.nav_host_fragment)?.let { navController ->
-                if (args.getString(TAG_SPLASH_STEP).isNullOrEmpty()) {
-                    args.getString(TAG_FLOW_STEP)?.let { flowstep ->
-                        when (flowstep) {
-                            FlowStep.MAIN.name -> {
-                                navController.navigate(R.id.action_Login_to_News)
-                            }
+                args.getString(TAG_FLOW_STEP)?.let { flowstep ->
+                    args.remove(TAG_FLOW_STEP)
+                    when (flowstep) {
+                        FlowStep.MAIN.name -> {
+                            navController.navigate(Route.News.id, bundle,option)
                         }
-                    }
-                } else {
-                    args.getString(TAG_FLOW_STEP)?.let { flowstep ->
-                        when (flowstep) {
-                            FlowStep.MAIN.name -> {
-                                navController.navigate(R.id.action_Splash_to_Main)
-                            }
-
-                            FlowStep.LOGIN_SIGNUP.name -> {
-                                navController.navigate(R.id.action_Splash_to_Login)
-                            }
+                        FlowStep.LOGIN_SIGNUP.name -> {
+                            navController.navigate(Route.Login.id, bundle,option)
                         }
                     }
                 }

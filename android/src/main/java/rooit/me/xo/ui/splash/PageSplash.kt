@@ -38,7 +38,7 @@ class PageSplash : Fragment() {
 
         binding.btLogin.setOnClickListener {
             val result = bundleOf(
-                TAG_SPLASH_STEP to SplashStep.SPLASH_FINISH.name,
+//                TAG_SPLASH_STEP to SplashStep.SPLASH_FINISH.name,
                 TAG_FLOW_STEP to FlowStep.LOGIN_SIGNUP.name
             )
             arguments?.let {
@@ -48,7 +48,7 @@ class PageSplash : Fragment() {
         }
         binding.btNormal.setOnClickListener {
             val result = bundleOf(
-                TAG_SPLASH_STEP to SplashStep.SPLASH_FINISH.name,
+//                TAG_SPLASH_STEP to SplashStep.SPLASH_FINISH.name,
                 TAG_FLOW_STEP to FlowStep.MAIN.name
             )
             arguments?.let {
