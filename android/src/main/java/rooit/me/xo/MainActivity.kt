@@ -2,7 +2,6 @@ package rooit.me.xo
 
 import android.content.Intent
 import android.graphics.Color
-import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -16,6 +15,7 @@ import rooit.me.xo.databinding.ActivityMainBinding
 import rooit.me.xo.ui.flow.FlowStep
 import rooit.me.xo.ui.flow.TAG_FLOW_STEP
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.NavGraph
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.navOptions
@@ -54,9 +54,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as? NavHostFragment)?.apply {
-            this.navController.let { nvc ->
+            navController.let { nvc -> // 直接使用 this.navController 更簡潔
                 if (savedInstanceState == null) {
-                    nvc.graph = NavigationProvider.getBuilder().build(nvc, Route.Splash)
+                    nvc.graph= NavigationProvider.getBuilder().build(nvc, Route.Splash)
                     val args = bundleOf(TAG_FLOW_STEP to FlowStep.SPLASH.name)
                     intent?.extras?.let { bundle ->
                         args.putAll(bundle)
@@ -94,6 +94,7 @@ class MainActivity : AppCompatActivity() {
                     args.remove(TAG_FLOW_STEP)
                     when (flowstep) {
                         FlowStep.MAIN.name -> {
+                            navController.popBackStack()
                             navController.navigate("${Route.News.routeName}/${jsonString}", option)
                         }
 

@@ -23,6 +23,7 @@ android {
         viewBinding true
         buildConfig true
         compose false
+        flavorDimensions = ["product_code"]
     }
 
     namespace 'rooit.me.xo'
@@ -62,6 +63,43 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+
+//    flavorDimensions "product_code"//move to buildFeatures
+    productFlavors {
+        legacy_nav {
+            getIsDefault().set(true)
+            dimension "product_code"
+            dependencies {
+                implementation libs.androidx.fragment.ktx
+                implementation libs.material
+
+                implementation libs.androidx.constraintlayout
+                implementation libs.androidx.navigation.fragment.ktx
+                implementation libs.splashscreen
+                implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
+
+                implementation libs.retrofit2
+
+                implementation libs.retrofit2.converter.kotlinx.serialization
+                implementation libs.okhttp
+                implementation libs.okhttp.interceptor.logging
+                implementation libs.glide
+                kapt libs.glide.compiler
+            }
+        }
+    }
+
+    sourceSets {
+        main {
+            java.srcDirs = ['src/main/java']
+            res.srcDirs = ['src/main/res']
+        }
+        legacy_nav {
+            java.srcDirs = ['src/legacy_nav/java']
+            res.srcDirs = ['src/legacy_nav/res']
+            manifest.srcFile 'src/legacy_nav/AndroidManifest.xml'
+        }
+    }
 }
 
 dependencies {
@@ -73,14 +111,12 @@ dependencies {
     implementation libs.androidx.core.ktx
     implementation libs.androidx.appcompat
     implementation libs.androidx.activity.ktx
-    implementation libs.androidx.fragment.ktx
-    implementation libs.material
 
-    implementation libs.androidx.constraintlayout
+    implementation libs.material
 
     implementation libs.androidx.lifecycle.livedata.ktx
     implementation libs.androidx.lifecycle.viewmodel.ktx
-    implementation libs.androidx.navigation.fragment.ktx
+
     implementation libs.androidx.navigation.ui.ktx
     implementation libs.splashscreen
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")

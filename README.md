@@ -13,7 +13,7 @@
 - 實作 MVVM 或 MVVMC 軟體框架
 - 可以使⽤任何協助你開發的 third party libs
 
-初始化 :  init  9fc63b196668175ac0873b679b0e5cda4ae90ed8
+# 初始化 :  init  9fc63b196668175ac0873b679b0e5cda4ae90ed8
 - Realm 需使用 Realm kotlin plugin (舊版一堆不相容)
 - Realm kotlin 須拉升超過 2.1.0   [Issue_1825]
 - 建議捨棄Realm 因為已經....被罵翻了   [Issue_1852] 
@@ -21,9 +21,9 @@
  [reddit] 
  [从 Realm 迁移到 SQLDelight]
 - Glide 在ksp需使用com.github.bumptech.glide:ksp  [kapt-->ksp]
-- 
-改用 StateFlow 取代 LiveData : 
-# Why not Flow or LiveData?
+
+# 改用 StateFlow 取代 LiveData : 
+### Why not Flow or LiveData?
 1. LiveData
     - LiveData has always been a love/hate thing for me. It's great for some things but can be very annoying for others. For example you MUST have an observer for livedata to emit anything. Making it pretty useless in a repository or anywhere except viewmodel->view communication.
 1. Flow
