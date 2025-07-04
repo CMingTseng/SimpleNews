@@ -1,13 +1,14 @@
 package rooit.me.xo.ui.splash
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 
 class SplashViewModel : ViewModel() {
-
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is Splash , Click me to Next "
-    }
-    val text: LiveData<String> = _text
+    private val _text = MutableStateFlow("This is Splash , Click me to Next ") // 1. 直接在構造函數中提供初始值
+    val text: LiveData<String> = _text.asLiveData()
+//    val text: StateFlow<String> = _text.asStateFlow()
 }
