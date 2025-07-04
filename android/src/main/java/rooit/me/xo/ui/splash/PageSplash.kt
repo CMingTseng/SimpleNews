@@ -12,8 +12,6 @@ import rooit.me.xo.databinding.FragmentSplashBinding
 import rooit.me.xo.route.Route.Companion.SPLASH_REQUEST_KEY
 import rooit.me.xo.ui.flow.FlowStep
 import rooit.me.xo.ui.flow.TAG_FLOW_STEP
-import rooit.me.xo.utils.fragment.FragmentResultRequestKey
-import timber.log.Timber
 
 class PageSplash : Fragment() {
     private var _binding: FragmentSplashBinding? = null
@@ -38,7 +36,6 @@ class PageSplash : Fragment() {
 
         binding.btLogin.setOnClickListener {
             val result = bundleOf(
-//                TAG_SPLASH_STEP to SplashStep.SPLASH_FINISH.name,
                 TAG_FLOW_STEP to FlowStep.LOGIN_SIGNUP.name
             )
             arguments?.let {
@@ -48,7 +45,6 @@ class PageSplash : Fragment() {
         }
         binding.btNormal.setOnClickListener {
             val result = bundleOf(
-//                TAG_SPLASH_STEP to SplashStep.SPLASH_FINISH.name,
                 TAG_FLOW_STEP to FlowStep.MAIN.name
             )
             arguments?.let {

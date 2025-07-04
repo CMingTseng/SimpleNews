@@ -2,6 +2,7 @@ package rooit.me.xo
 
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.View
@@ -23,6 +24,9 @@ import rooit.me.xo.route.Route
 import rooit.me.xo.route.Route.Companion.LOGIN_REQUEST_KEY
 import rooit.me.xo.route.Route.Companion.SPLASH_REQUEST_KEY
 import rooit.me.xo.ui.splash.TAG_SPLASH_STEP
+import rooit.me.xo.utils.navigate
+import rooit.me.xo.utils.toJsonString
+import rooit.me.xo.utils.toQueryString
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -62,36 +66,39 @@ class MainActivity : AppCompatActivity() {
 
             childFragmentManager.setFragmentResultListener(SPLASH_REQUEST_KEY,this) { requestkey, bundle ->
                 bundle.remove(TAG_SPLASH_STEP)
-                val options=navOptions {
-                    popUpTo(Route.Splash.id) {
+                val options = navOptions {
+                    popUpTo(Route.Splash.routeName) {
                         inclusive = true
                     }
                 }
-                switchDestination(bundle,options)
+                switchDestination(bundle, options)
             }
 
             childFragmentManager.setFragmentResultListener(LOGIN_REQUEST_KEY,this) { requestkey, bundle ->
-                val options=navOptions {
-                    popUpTo(Route.Login.id) {
+                val options = navOptions {
+                    popUpTo(Route.Login.routeName) {
                         inclusive = true
                     }
                 }
-                switchDestination(bundle,options)
+                switchDestination(bundle, options)
             }
         }
-        applicationContext
     }
-    private fun switchDestination(bundle: Bundle? = null,option: NavOptions?) {
+
+    private fun switchDestination(bundle: Bundle? = null, option: NavOptions?) {
         bundle?.let { args ->
+            val queryString = args.toQueryString()
+            val jsonString = args.toJsonString()
             findNavController(R.id.nav_host_fragment)?.let { navController ->
                 args.getString(TAG_FLOW_STEP)?.let { flowstep ->
                     args.remove(TAG_FLOW_STEP)
                     when (flowstep) {
                         FlowStep.MAIN.name -> {
-                            navController.navigate(Route.News.id, bundle,option)
+                            navController.navigate("${Route.News.routeName}/${jsonString}", option)
                         }
+
                         FlowStep.LOGIN_SIGNUP.name -> {
-                            navController.navigate(Route.Login.id, bundle,option)
+                            navController.navigate(Route.Login.routeName, args, option)
                         }
                     }
                 }
