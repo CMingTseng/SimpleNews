@@ -28,9 +28,9 @@ class MainApp : Application() {
             // Reference Android context
             androidContext(this@MainApp)
             // Load modules
-            modules(NetworkModule.RetrofitModule)
+//            modules(NetworkModule)
             modules(listOf(
-                NetworkModule.RetrofitModule,
+                NetworkModule,
                 apiModule,
                 repositoryModule,
                 viewModelModule,

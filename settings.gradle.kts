@@ -2,8 +2,7 @@ pluginManagement {
     repositories {
         gradlePluginPortal()
         maven(url = "https://plugins.gradle.org/m2/")
-        maven(url = "https://maven.aliyun.com/repository/gradle-plugin/")
-        maven(url = "https://maven.aliyun.com/repository/spring-plugin/")
+        mavenCentral()
         google {
             content {
                 includeGroupByRegex("com\\.android.*")
@@ -11,12 +10,12 @@ pluginManagement {
                 includeGroupByRegex("androidx.*")
             }
         }
-        mavenCentral()
+        maven(url = "https://maven.aliyun.com/repository/gradle-plugin/")
+        maven(url = "https://maven.aliyun.com/repository/spring-plugin/")
         maven(url = "https://jitpack.io")
         maven(url = "https://s3.amazonaws.com/repo.commonsware.com")
         maven(url = "https://maven.pkg.jetbrains.space/public/p/compose/dev")
         maven(url = "https://api.xposed.info/")
-        maven(url = "https://www.dfki.uni-kl.de/artifactory/libs-releases/")
         maven(url = "https://jogamp.org/deployment/maven")
         maven(url = "https://developer.huawei.com/repo/")
         maven(url = "https://raw.githubusercontent.com/cybernhl/maven-repository/master/")
@@ -35,13 +34,12 @@ pluginManagement {
 @Suppress("UnstableApiUsage")
 dependencyResolutionManagement {
     repositories {
-        google()
         mavenCentral()
+        google()
         maven(url = "https://jitpack.io")
         maven(url = "https://s3.amazonaws.com/repo.commonsware.com")
         maven(url = "https://maven.pkg.jetbrains.space/public/p/compose/dev")
         maven(url = "https://api.xposed.info/")
-        maven(url = "https://www.dfki.uni-kl.de/artifactory/libs-releases/")
         maven(url = "https://jogamp.org/deployment/maven")
         maven(url = "https://raw.githubusercontent.com/cybernhl/maven-repository/master/")
         maven(url = "https://maven.aliyun.com/repository/jcenter")
@@ -52,7 +50,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
 val fullVersion = System.getProperty("java.version", "8.0.0")

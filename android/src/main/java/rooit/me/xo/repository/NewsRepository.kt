@@ -16,6 +16,7 @@ import rooit.me.xo.model.Article
 import rooit.me.xo.model.Source
 import rooit.me.xo.model.db.realm.ArticleRealm
 import rooit.me.xo.model.db.realm.SourceRealm
+import timber.log.Timber
 import java.io.IOException
 
 class NewsRepository(private val api: NewsApi, private val realm: Realm) {
@@ -30,13 +31,13 @@ class NewsRepository(private val api: NewsApi, private val realm: Realm) {
 
     fun fetchTopHeadlinesFlow(country: String, apiKey: String): Flow<List<Article>> = flow {
         try {
-            val response = api.fetchTopHeadlines(country, apiKey)
-            if (response.isSuccessful) {
-                val news = response.body()
-                val articles = news?.articles ?: emptyList()
+            api.fetchTopHeadlines(country, apiKey).apply {
+                val articles = this.articles?: emptyList()
                 emit(articles)
+
             }
         } catch (throwable: Throwable) {
+            Timber.e("Show me  fetchTopHeadlines get throwable $throwable")
             // TODO here emit Throwable
             //     Ref : https://blog.csdn.net/jungle_pig/article/details/105725160
             //     Ref : https://blog.csdn.net/zhaoyanjun6/article/details/121754941
