@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
-    id 'kotlin-kapt'
+    alias(libs.plugins.ksp)
     id "org.jetbrains.kotlin.plugin.serialization"
     id "io.realm.kotlin"
 }
@@ -84,7 +84,7 @@ android {
                 implementation libs.okhttp
                 implementation libs.okhttp.interceptor.logging
                 implementation libs.glide
-                kapt libs.glide.compiler
+                ksp libs.glide.ksp
             }
         }
     }
@@ -132,8 +132,7 @@ dependencies {
     implementation libs.okhttp
     implementation libs.okhttp.interceptor.logging
     implementation libs.glide
-    kapt libs.glide.compiler
-//    ksp libs.glide.ksp
+    ksp libs.glide.ksp
 
     implementation libs.realm.kotlin.base
 //    implementation libs.realm.kotlin.sync

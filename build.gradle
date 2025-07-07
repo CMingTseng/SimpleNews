@@ -64,7 +64,7 @@ plugins {
     id "org.jetbrains.kotlin.plugin.serialization" version "${kotlin_version}" apply false
     //apply plugin: "org.jetbrains.kotlin.plugin.serialization"
     id "org.jetbrains.compose" version "${jb_compose_version}" apply false
-
+    alias(libs.plugins.ksp) apply false
     //    id 'io.realm.kotlin' version "${realm_kotlin}" apply false
 }
 

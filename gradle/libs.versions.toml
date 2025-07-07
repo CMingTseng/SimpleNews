@@ -53,7 +53,7 @@ kotlinx-serialization = "1.8.1"
 #region Net
 ktor = "3.2.1"
 
-ktorfit = "2.5.2"
+ktorfit = "2.1.0"
 retrofit2 = "2.9.0"
 retrofit2_kotlinx_serialization_converter = "1.0.0"
 okhttp = "4.12.0"
@@ -71,7 +71,7 @@ pagingComposeCommon = "3.3.0-alpha02-0.5.1"
 #region Image
 coil = "3.0.0-alpha01"
 kamelImage = "1.0.6"
-glide = "4.12.0"
+glide = "4.16.0"
 #endregion
 
 
@@ -243,6 +243,7 @@ image = { module = "media.kamel:kamel-image", version.ref = "kamelImage" }
 imageLoader = { module = "io.github.qdsfdhvh:image-loader", version="1.10.0" }
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 glide-compiler= { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
+glide-ksp= { group = "com.github.bumptech.glide", name = "ksp", version.ref = "glide" }
 #endregion
 
 #region DB
