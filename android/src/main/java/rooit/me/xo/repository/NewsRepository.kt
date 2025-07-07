@@ -1,5 +1,6 @@
 package rooit.me.xo.repository
 
+import android.net.http.HttpException
 import io.realm.kotlin.Realm
 import io.realm.kotlin.delete
 import io.realm.kotlin.ext.query
@@ -10,7 +11,6 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import retrofit2.HttpException
 import rooit.me.xo.api.NewsApi
 import rooit.me.xo.model.Article
 import rooit.me.xo.model.Source
@@ -45,11 +45,6 @@ class NewsRepository(private val api: NewsApi, private val realm: Realm) {
             when (throwable) {
                 is IOException -> {
 
-                }
-
-                is HttpException -> {
-                    val codeError = throwable.code()
-                    val errorMessageResponse = throwable.message()
                 }
 
                 else -> {

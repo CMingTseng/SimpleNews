@@ -65,6 +65,7 @@ plugins {
     //apply plugin: "org.jetbrains.kotlin.plugin.serialization"
     id "org.jetbrains.compose" version "${jb_compose_version}" apply false
     alias(libs.plugins.ksp) apply false
+    alias(libs.plugins.de.ktorfit)
     //    id 'io.realm.kotlin' version "${realm_kotlin}" apply false
 }
 
