@@ -30,32 +30,53 @@ class PageNews : Fragment() {
             show()
             title = getString(R.string.title_news)
         }
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                vm.isRefreshing.collect { isLoading ->
-                    binding.refresh.isRefreshing = isLoading
-                }
-            }
+
+        binding.list.apply {
+            adapter = ArticleAdapter()
         }
+
+        binding.refresh.setOnRefreshListener {
+            vm.dispatch(NewsViewAction.RefreshNews)
+        }
+
         viewLifecycleOwner.lifecycleScope.launch {
+            vm.dispatch(NewsViewAction.RefreshNews)
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                vm.allNews.collectLatest { articles ->
-                    if (binding.list.adapter == null) {
-                        ArticleAdapter().apply {
-                            submitList(articles)
-                            binding.list.adapter =this
+                vm.uiState.collectLatest { state ->
+                    // Update SwipeRefreshLayout's refreshing state
+                    binding.refresh.isRefreshing = state.isRefreshing
+
+                    (binding.list.adapter as? ArticleAdapter)?.submitList(state.articles)
+
+                    // Handle loading state for initial load (e.g., show a ProgressBar)
+                    // This is simplified here, you might have a dedicated ProgressBar
+                    if (state.isLoading && !state.isRefreshing && state.articles.isEmpty()) {
+                        binding.list.visibility = View.GONE
+                    } else {
+                        // Visibility based on articles and user messages
+                        if (state.articles.isNotEmpty()) {
+                            binding.list.visibility = View.VISIBLE
+                        } else {
+                            // No articles, show message if available, otherwise hide list
+                            binding.list.visibility = View.GONE
+                            if (state.userMessage != null) {
+                            } else {
+
+                            }
                         }
-                    }else{
-                        (binding.list.adapter as ArticleAdapter).submitList(articles)
+                    }
+
+                    // Show toast for other user messages (e.g., transient errors if list is already populated)
+                    if (state.userMessage != null && state.articles.isNotEmpty() && !state.isLoading && !state.isRefreshing) {
+                        // Avoid showing "Loading..." or "No news" as toast if list is present
+                        if (state.userMessage != "Loading news..." && state.userMessage != "No news available." && state.userMessage != "No new articles found from network.") {
+
+                        }
                     }
                 }
             }
         }
 
-        binding.refresh.setOnRefreshListener {
-            vm.fetchTopHeadlines(forceRefresh = true)
-        }
-        vm.fetchTopHeadlines()
         return binding.root
     }
 

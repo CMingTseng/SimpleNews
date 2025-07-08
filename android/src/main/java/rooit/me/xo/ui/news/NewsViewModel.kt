@@ -1,5 +1,7 @@
 package rooit.me.xo.ui.news
 
+import androidx.compose.animation.core.copy
+import androidx.compose.ui.geometry.isEmpty
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -9,65 +11,101 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.io.IOException
 import rooit.me.xo.BuildConfig
 import rooit.me.xo.model.Article
 import rooit.me.xo.repository.NewsRepository
 import timber.log.Timber
 
-class NewsViewModel (private val repo: NewsRepository) : ViewModel() {
-    private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
-    private val _allNews = MutableStateFlow<List<Article>>(emptyList())
-    val allNews: StateFlow<List<Article>> = _allNews.asStateFlow()
+class NewsViewModel(private val repo: NewsRepository) : ViewModel() {
+
+    private val _uiState = MutableStateFlow(NewsUiState())
+    val uiState: StateFlow<NewsUiState> = _uiState.asStateFlow()
 
     init {
-        loadInitialNewsFromDB()
+        // Observe DB changes as the primary source of truth for the article list
+        observeDatabaseChanges()
+        // Trigger initial data load
+        dispatch(NewsViewAction.InitialLoadOrRetry)
     }
-    private fun loadInitialNewsFromDB() {
-        repo.fetchTopHeadlinesFromDBFlow()
-            .onEach { articlesFromDB ->
-                _allNews.value = articlesFromDB
-            }
-            .catch { e ->
-                Timber.e(e, "Error loading news from DB")
-            }
-            .launchIn(viewModelScope)
+
+    private fun observeDatabaseChanges() {
+        viewModelScope.launch {
+            repo.observeArticlesFromDB()
+                .catch { e ->
+                    Timber.e(e, "Error observing DB changes")
+                    _uiState.update { it.copy(userMessage = "Database error: ${e.localizedMessage}") }
+                }
+                .collectLatest { articlesFromDb ->
+                    _uiState.update { currentState ->
+                        currentState.copy(
+                            articles = articlesFromDb,
+                            // isLoading might be true due to network fetch, don't override it here
+                            // unless DB emitting means loading is done.
+                            // isRefreshing is handled by network calls.
+                            userMessage = if (articlesFromDb.isEmpty() && !currentState.isLoading && !currentState.isRefreshing) "No news available." else null
+                        )
+                    }
+                }
+        }
     }
+
+    fun dispatch(action: NewsViewAction) {
+        when (action) {
+            NewsViewAction.InitialLoadOrRetry -> loadNews(isRefresh = false)
+            NewsViewAction.RefreshNews -> loadNews(isRefresh = true)
+        }
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    fun fetchTopHeadlines(forceRefresh: Boolean = true) {
-        if (_isRefreshing.value && !forceRefresh) {
-            Timber.d("Already refreshing, skipping network request.")
+    private fun loadNews(isRefresh: Boolean) {
+        // Prevent multiple simultaneous loads unless it's a forced refresh
+        if ((_uiState.value.isLoading || _uiState.value.isRefreshing) && !isRefresh && !repo.isCurrentlyFetchingFromNetwork()) {
+            Timber.d("Load/Refresh in progress, skipping.")
             return
         }
-        viewModelScope.launch(Dispatchers.IO) {
-            repo.fetchTopHeadlinesFlow("us", BuildConfig.API_KEY)
-                .onStart {
-                    _isRefreshing.value = true
-                    Timber.d("Network refresh started.")
-                }
-                .mapLatest { articlesFromNetwork ->
-                    try {
-                        repo.syncResultIntoDB(articlesFromNetwork)
-                        Timber.d("Network articles synced to DB.")
-                    } catch (e: Exception) {
-                        Timber.e(e, "Error syncing network articles to DB")
+
+        viewModelScope.launch {
+            _uiState.update {
+                if (isRefresh) it.copy(isRefreshing = true, userMessage = null)
+                else it.copy(isLoading = true, userMessage = null)
+            }
+
+            try {
+                Timber.d("Attempting to fetch articles from network. Is refresh: $isRefresh")
+                val articlesFromNetwork = repo.fetchTopHeadlinesFromNetwork("us", BuildConfig.API_KEY)
+                if (articlesFromNetwork.isNotEmpty()) {
+                    repo.syncArticlesToDB(articlesFromNetwork)
+                    Timber.d("Successfully fetched ${articlesFromNetwork.size} articles and synced to DB.")
+                    // DB observation will update the list
+                } else {
+                    Timber.d("Network fetch returned empty list or was skipped.")
+                    // If DB is also empty, it will be reflected by the DB observer
+                    if (_uiState.value.articles.isEmpty()){
+                        _uiState.update { it.copy(userMessage = "No new articles found from network.") }
                     }
-                    articlesFromNetwork // 或者返回 Unit
                 }
-                .onCompletion {
-                    _isRefreshing.value = false
-                    Timber.d("Network refresh completed (onCompletion).")
+            } catch (e: IOException) {
+                Timber.e(e, "Network error during loadNews")
+                _uiState.update { it.copy(userMessage = "Network error. Please check your connection.") }
+            } catch (e: Exception) {
+                Timber.e(e, "Generic error during loadNews")
+                _uiState.update { it.copy(userMessage = "An unexpected error occurred.") }
+            } finally {
+                _uiState.update {
+                    if (isRefresh) it.copy(isRefreshing = false)
+                    else it.copy(isLoading = false)
                 }
-                .catch { e ->
-                    Timber.e(e, "Error fetching top headlines from network")
-                }
-                .collect()
+                Timber.d("loadNews finished. Is refresh: $isRefresh")
+            }
         }
     }
 }
