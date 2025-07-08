@@ -8,6 +8,8 @@
         android:name="rooit.me.xo.ui.news.PageNews"
         android:label="@string/title_news"
         tools:layout="@layout/fragment_news">
-        <action />
+        <action
+            android:id="@+id/action_news_to_future_destination_for_todo" />
+
     </fragment>
 </navigation>

@@ -12,8 +12,46 @@ import rooit.me.xo.route.Route.Companion.ARGS_KEY
 import rooit.me.xo.ui.login.PageLogin
 import rooit.me.xo.ui.news.PageNews
 import rooit.me.xo.ui.splash.PageSplash
+import androidx.navigation.NavGraphBuilder as AndroidXNavGraphBuilder
 
-class KDslNavigationBuilder : NavigationBuilder {
+class KDslNavigationBuilder :  NavGraphContentLambdaBuilder,NavigationBuilder {
+    override fun defineGraphContent(
+        navController: NavController,
+        startDestId: Route,
+        graphResId: Int?
+    ): AndroidXNavGraphBuilder.() -> Unit { // 返回 AndroidX NavGraphBuilder 的扩展 lambda
+        return {
+            // 'this' 在这里是 AndroidXNavGraphBuilder，
+            // 因为这个 lambda 会被传递给 navController.createGraph
+
+            fragment<PageSplash>(startDestId.routeName) { // 使用传入的 startDestId
+                label = "Splash"
+                deepLink { uriPattern = Route.Splash.deepLinkUri } // 示例
+                deepLink { uriPattern = NavDestination.createRoute(Route.Splash.routeName) }
+            }
+
+            fragment<PageLogin>("${Route.Login.routeName}/{${ARGS_KEY}}?") {
+                label = "Login"
+                argument(ARGS_KEY) {
+                    type = androidx.navigation.NavType.StringType
+                    nullable = true
+                }
+                deepLink { uriPattern = Route.Login.deepLinkUri } // 示例
+                deepLink { uriPattern = NavDestination.createRoute(Route.Login.routeName) }
+            }
+
+            fragment<PageNews>("${Route.News.routeName}/{${ARGS_KEY}}?") {
+                label = "NewsPage"
+                argument(ARGS_KEY) {
+                    type = androidx.navigation.NavType.StringType
+                    nullable = true
+                }
+                deepLink { uriPattern = Route.News.deepLinkUri } // 示例
+                deepLink { uriPattern = NavDestination.createRoute(Route.News.routeName) }
+            }
+        }
+    }
+
     override fun build(
         navController: NavController,
         startDestId: Route,

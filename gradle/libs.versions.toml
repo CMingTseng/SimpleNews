@@ -18,7 +18,7 @@ androidx-lifecycle = "2.8.6"
 lifecycleLivedataKtx = "2.8.6"
 lifecycleViewmodelKtx = "2.8.6"
 lifecycleRuntimeKtx = "2.8.6"
-androidx-navigation = "2.8.2"
+androidx-navigation = "2.9.1"
 navigationFragmentKtx = "2.8.2"
 navigationUiKtx = "2.8.2"
 androidx-splashscreen = "1.0.1"
@@ -43,7 +43,7 @@ jetbrains-navigation = "2.8.0-alpha13"
 
 #region DI
 koin = "4.0.0"
-koin-jb-compose= "1.1.2"#next version is 3.6.0!!
+
 #endregion
 
 #region Json &  Gson & Serialization
@@ -69,7 +69,7 @@ pagingComposeCommon = "3.3.0-alpha02-0.5.1"
 #endregion
 
 #region Image
-coil = "3.0.0-alpha01"
+coil = "3.2.0"
 kamelImage = "1.0.6"
 glide = "4.16.0"
 #endregion
@@ -112,6 +112,7 @@ kotlin_serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "jetbrains-compose-multiplatform" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 de-ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
 realm = { id = "io.realm:realm-gradle-plugin", version.ref = "realm_version" }
 realm_kotlin = { id = "io.realm.kotlin", version.ref = "realm_kotlin_version" }
@@ -140,6 +141,7 @@ androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecy
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "androidx-navigation" }
+androidx-navigation-dynamic-features-fragment = { group = "androidx.navigation", name = "navigation-dynamic-features-fragment", version.ref = "androidx-navigation" }
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "androidx-navigation" }
 paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "androidx-pagging" }
 splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidx-splashscreen" }
@@ -227,12 +229,16 @@ koin-android-compat = { module = "io.insert-koin:koin-android-compat", version.r
 koin-androidx-workmanager  = { module = "io.insert-koin:koin-androidx-workmanager", version.ref = "koin" }
 koin-androidx-navigation  = { module = "io.insert-koin:koin-androidx-navigation", version.ref = "koin" }
 
+
+
+# Ref https://medium.com/@anna972606/koin-for-jetpack-compose-7b04040167f9
+# Ref https://proandroiddev.com/compose-multiplatform-viewmodel-support-with-koin-di-ktor-1f2c95acb446
 koin-androidx-compose  = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 koin-androidx-compose-navigation  = { module = "io.insert-koin:koin-androidx-compose-navigation", version.ref = "koin" }
-
+koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
+koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel", version.ref = "koin" }
+koin-compose-viewmodel-navigation = { module = "io.insert-koin:koin-compose-viewmodel-navigation", version.ref = "koin" }
 koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
-
-koin-jb-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin-jb-compose" }
 #endregion
 
 #region Permissions
@@ -242,9 +248,29 @@ moko_permissions-test = { module = "dev.icerock.moko:permissions-test", version.
 #endregion
 
 #region Image
-coil = { module = "io.coil-kt:coil", version.ref = "coil" }
-image = { module = "media.kamel:kamel-image", version.ref = "kamelImage" }
-imageLoader = { module = "io.github.qdsfdhvh:image-loader", version="1.10.0" }
+coil-bom = { module = "io.coil-kt.coil3:coil-bom", version.ref = "coil" }
+coil-core = { module = "io.coil-kt.coil3:coil-core", version.ref = "coil" }
+coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil" }
+coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
+coil-network-ktor2 = { module = "io.coil-kt.coil3:coil-network-ktor2", version.ref = "coil" }
+coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coil" }
+coil-network-cache-control = { module = "io.coil-kt.coil3:coil-network-cache-control", version.ref = "coil" }
+coil-gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
+coil-svg = { module = "io.coil-kt.coil3:coil-svg", version.ref = "coil" }
+coil-video = { module = "io.coil-kt.coil3:coil-video", version.ref = "coil" }
+
+kamel-image-default = { module = "media.kamel:kamel-image-default", version.ref = "kamelImage" }
+kamel-image = { module = "media.kamel:kamel-image", version.ref = "kamelImage" }
+kamel-decoder-image-bitmap = { module = "media.kamel:kamel-decoder-image-bitmap", version.ref = "kamelImage" }
+kamel-decoder-image-bitmap-resizing = { module = "media.kamel:kamel-decoder-image-bitmap-resizing", version.ref = "kamelImage" }
+kamel-decoder-image-vector= { module = "media.kamel:kamel-decoder-image-vector", version.ref = "kamelImage" }
+kamel-decoder-svg-batik= { module = "media.kamel:kamel-decoder-svg-batik", version.ref = "kamelImage" }
+kamel-decoder-svg-std = { module = "media.kamel:kamel-decoder-svg-std", version.ref = "kamelImage" }
+kamel-fetcher-resources-jvm = { module = "media.kamel:kamel-fetcher-resources-jvm", version.ref = "kamelImage" }
+kamel-fetcher-resources-android = { module = "media.kamel:kamel-fetcher-resources-android", version.ref = "kamelImage" }
+
 glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
 glide-compiler= { group = "com.github.bumptech.glide", name = "compiler", version.ref = "glide" }
 glide-ksp= { group = "com.github.bumptech.glide", name = "ksp", version.ref = "glide" }

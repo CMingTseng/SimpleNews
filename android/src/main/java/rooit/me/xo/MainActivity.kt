@@ -20,6 +20,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.navOptions
 import rooit.me.xo.navigation.NavigationProvider
+import rooit.me.xo.navigation.XmlNavigationBuilder
 import rooit.me.xo.route.Route
 import rooit.me.xo.route.Route.Companion.LOGIN_REQUEST_KEY
 import rooit.me.xo.route.Route.Companion.SPLASH_REQUEST_KEY
@@ -56,6 +57,7 @@ class MainActivity : AppCompatActivity() {
         (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as? NavHostFragment)?.apply {
             navController.let { nvc -> // 直接使用 this.navController 更簡潔
                 if (savedInstanceState == null) {
+//                    nvc.graph= NavigationProvider.getBuilder().build(nvc, Route.Splash,R.navigation.navi_splash)
                     nvc.graph= NavigationProvider.getBuilder().build(nvc, Route.Splash)
                     val args = bundleOf(TAG_FLOW_STEP to FlowStep.SPLASH.name)
                     intent?.extras?.let { bundle ->
