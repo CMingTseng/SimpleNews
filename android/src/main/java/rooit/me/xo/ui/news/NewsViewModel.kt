@@ -19,6 +19,7 @@ import rooit.me.xo.BuildConfig
 import rooit.me.xo.model.Article
 import rooit.me.xo.repository.NewsRepository
 import timber.log.Timber
+
 class NewsViewModel (private val repo: NewsRepository) : ViewModel() {
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()

@@ -5,6 +5,7 @@ plugins {
     id "org.jetbrains.kotlin.plugin.serialization"
     id "io.realm.kotlin"
     id("de.jensklingenberg.ktorfit")
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -23,7 +24,7 @@ android {
     buildFeatures {
         viewBinding true
         buildConfig true
-        compose false
+        compose true
         flavorDimensions = ["product_code"]
     }
 
@@ -73,13 +74,42 @@ android {
             dependencies {
                 implementation libs.androidx.fragment.ktx
                 implementation libs.material
-
                 implementation libs.androidx.constraintlayout
                 implementation libs.androidx.navigation.fragment.ktx
                 implementation libs.splashscreen
                 implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
                 implementation libs.glide
                 ksp libs.glide.ksp
+                implementation libs.koin.android
+            }
+        }
+
+        cmp_kmp {
+            dimension "product_code"
+            dependencies {
+                implementation(libs.androidx.lifecycle.runtime.ktx)
+                implementation(libs.androidx.activity.compose)
+                implementation(platform(libs.androidx.compose.bom))
+                implementation(libs.androidx.compose.ui)
+                implementation(libs.androidx.compose.ui.graphics)
+                implementation(libs.androidx.compose.ui.tooling.preview)
+                implementation(libs.androidx.compose.foundation)
+
+                implementation(libs.androidx.compose.material3)
+                implementation(libs.androidx.navigation.compose  )
+
+                implementation(libs.koin.androidx.compose)
+                implementation(libs.koin.androidx.compose.navigation )
+                implementation(libs.koin.compose)
+                implementation(libs.koin.compose.viewmodel)
+                implementation(libs.koin.compose.viewmodel.navigation)
+
+                implementation(libs.coil.core)
+                implementation(libs.coil)
+                implementation(libs.coil.compose)
+                implementation(libs.coil.compose.core)
+                implementation(libs.coil.network.ktor3)
+                implementation(libs.coil.svg)
             }
         }
     }
@@ -88,11 +118,17 @@ android {
         main {
             java.srcDirs = ['src/main/java']
             res.srcDirs = ['src/main/res']
+            manifest.srcFile 'src/main/AndroidManifest.xml'
         }
         legacy_nav {
             java.srcDirs = ['src/legacy_nav/java']
             res.srcDirs = ['src/legacy_nav/res']
             manifest.srcFile 'src/legacy_nav/AndroidManifest.xml'
+        }
+        cmp_kmp {
+            java.srcDirs = ['src/cmp_kmp/java']
+            res.srcDirs = ['src/cmp_kmp/res']
+            manifest.srcFile 'src/cmp_kmp/AndroidManifest.xml'
         }
     }
 }
@@ -107,8 +143,6 @@ dependencies {
     implementation libs.androidx.appcompat
     implementation libs.androidx.activity.ktx
 
-    implementation libs.material
-
     implementation libs.androidx.lifecycle.livedata.ktx
     implementation libs.androidx.lifecycle.viewmodel.ktx
 
@@ -120,7 +154,6 @@ dependencies {
     implementation  libs.timber
 
     implementation libs.koin.core
-    implementation libs.koin.android
 
     implementation(libs.ktor.client.cio)
     implementation(libs.ktor.client.json)

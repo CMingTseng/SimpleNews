@@ -40,18 +40,14 @@ class PageNews : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 vm.allNews.collectLatest { articles ->
-                    binding.list.adapter = ArticleAdapter(articles)
-//                    if (binding.list.adapter == null) {
-//                        val adapter = ArticleAdapter(articles)
-//                        binding.list.adapter = adapter
-//                    }else{
-//                        (binding.list.adapter as ArticleAdapter).submitList(articles)
-//                    }
-//                    (binding.list.adapter as? ArticleAdapter)?.submitList(articles)
-//                        ?: run {
-//                            val newAdapter = ArticleAdapter(articles)
-//                            binding.list.adapter = newAdapter
-//                        }
+                    if (binding.list.adapter == null) {
+                        ArticleAdapter().apply {
+                            submitList(articles)
+                            binding.list.adapter =this
+                        }
+                    }else{
+                        (binding.list.adapter as ArticleAdapter).submitList(articles)
+                    }
                 }
             }
         }

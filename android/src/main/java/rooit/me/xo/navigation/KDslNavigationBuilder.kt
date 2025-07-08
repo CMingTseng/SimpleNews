@@ -19,11 +19,8 @@ class KDslNavigationBuilder :  NavGraphContentLambdaBuilder,NavigationBuilder {
         navController: NavController,
         startDestId: Route,
         graphResId: Int?
-    ): AndroidXNavGraphBuilder.() -> Unit { // 返回 AndroidX NavGraphBuilder 的扩展 lambda
+    ): AndroidXNavGraphBuilder.() -> Unit {
         return {
-            // 'this' 在这里是 AndroidXNavGraphBuilder，
-            // 因为这个 lambda 会被传递给 navController.createGraph
-
             fragment<PageSplash>(startDestId.routeName) { // 使用传入的 startDestId
                 label = "Splash"
                 deepLink { uriPattern = Route.Splash.deepLinkUri } // 示例
@@ -80,7 +77,7 @@ class KDslNavigationBuilder :  NavGraphContentLambdaBuilder,NavigationBuilder {
                     }
                 )
                 // 支持外部 app scheme
-                deepLink { uriPattern = Route.Splash.deepLinkUri }
+                deepLink { uriPattern = Route.News.deepLinkUri }
                 // 支持內部 createRoute 生成的 URI
                 deepLink { uriPattern = NavDestination.createRoute(Route.Login.routeName) }
             }
@@ -91,7 +88,7 @@ class KDslNavigationBuilder :  NavGraphContentLambdaBuilder,NavigationBuilder {
                     nullable = true
                 }
                 // 支持外部 app scheme
-                deepLink { uriPattern = Route.Splash.deepLinkUri }
+                deepLink { uriPattern = Route.News.deepLinkUri }
                 // 支持內部 createRoute 生成的 URI
                 deepLink { uriPattern = NavDestination.createRoute(Route.News.routeName) }
             }

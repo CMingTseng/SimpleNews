@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import android.view.Window
-import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -15,12 +14,10 @@ import rooit.me.xo.databinding.ActivityMainBinding
 import rooit.me.xo.ui.flow.FlowStep
 import rooit.me.xo.ui.flow.TAG_FLOW_STEP
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.navigation.NavGraph
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.navOptions
 import rooit.me.xo.navigation.NavigationProvider
-import rooit.me.xo.navigation.XmlNavigationBuilder
 import rooit.me.xo.route.Route
 import rooit.me.xo.route.Route.Companion.LOGIN_REQUEST_KEY
 import rooit.me.xo.route.Route.Companion.SPLASH_REQUEST_KEY
@@ -78,7 +75,7 @@ class MainActivity : AppCompatActivity() {
 
             childFragmentManager.setFragmentResultListener(LOGIN_REQUEST_KEY,this) { requestkey, bundle ->
                 val options = navOptions {
-                    popUpTo(Route.Login.routeName) {
+                    popUpTo("${Route.Login.routeName}") {//TODO use args need "/"
                         inclusive = true
                     }
                 }
