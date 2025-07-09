@@ -14,9 +14,13 @@ import rooit.me.xo.databinding.ActivityMainBinding
 import rooit.me.xo.ui.flow.FlowStep
 import rooit.me.xo.ui.flow.TAG_FLOW_STEP
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.navigation.NavGraph
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
+import androidx.navigation.createGraph
 import androidx.navigation.findNavController
 import androidx.navigation.navOptions
+import rooit.me.xo.navigation.KDslNavigationBuilder
 import rooit.me.xo.navigation.NavigationProvider
 import rooit.me.xo.route.Route
 import rooit.me.xo.route.Route.Companion.LOGIN_REQUEST_KEY
@@ -25,6 +29,7 @@ import rooit.me.xo.ui.splash.TAG_SPLASH_STEP
 import rooit.me.xo.utils.navigate
 import rooit.me.xo.utils.toJsonString
 import rooit.me.xo.utils.toQueryString
+import rooit.me.xo.utils.toUriJsonString
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -54,12 +59,17 @@ class MainActivity : AppCompatActivity() {
         (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as? NavHostFragment)?.apply {
             navController.let { nvc -> // 直接使用 this.navController 更簡潔
                 if (savedInstanceState == null) {
-//                    nvc.graph= NavigationProvider.getBuilder().build(nvc, Route.Splash,R.navigation.navi_splash)
-                    nvc.graph= NavigationProvider.getBuilder().build(nvc, Route.Splash)
                     val args = bundleOf(TAG_FLOW_STEP to FlowStep.SPLASH.name)
                     intent?.extras?.let { bundle ->
                         args.putAll(bundle)
                     }
+//                    nvc.graph= NavigationProvider.getBuilder().build(nvc, Route.Splash,R.navigation.navi_splash)
+                    nvc.graph= NavigationProvider.getBuilder().build(nvc, Route.Splash)
+//                    nvc.graph=  navController.createGraph(
+//                        startDestination = Route.Splash.routeName,
+//                        route = null as String?,// null or this route graph name
+//                        builder = KDslNavigationBuilder().defineGraphContent(nvc, Route.Splash,args.toUriJsonString()) // 传入您的 DSL lambda
+//                    )
                 }
             }
 

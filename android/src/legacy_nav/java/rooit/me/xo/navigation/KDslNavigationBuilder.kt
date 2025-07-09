@@ -1,8 +1,10 @@
 package rooit.me.xo.navigation
 
+import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.createGraph
 import rooit.me.xo.route.Route
@@ -14,20 +16,22 @@ import rooit.me.xo.ui.news.PageNews
 import rooit.me.xo.ui.splash.PageSplash
 import androidx.navigation.NavGraphBuilder as AndroidXNavGraphBuilder
 
-class KDslNavigationBuilder :  NavGraphContentLambdaBuilder,NavigationBuilder {
+class KDslNavigationBuilder : NavGraphContentLambdaBuilder, NavigationBuilder {
     override fun defineGraphContent(
         navController: NavController,
         startDestId: Route,
+        args_string: String?,
         graphResId: Int?
-    ): AndroidXNavGraphBuilder.() -> Unit {
+    ): NavGraphBuilder.() -> Unit {
         return {
+            //Ref : FragmentNavigatorDestinationBuilder  like  : fun createFragmentDestinationConfig( ): FragmentNavigatorDestinationBuilder.() -> Unit {}
             fragment<PageSplash>(startDestId.routeName) { // 使用传入的 startDestId
                 label = "Splash"
                 deepLink { uriPattern = Route.Splash.deepLinkUri } // 示例
                 deepLink { uriPattern = NavDestination.createRoute(Route.Splash.routeName) }
             }
 
-            fragment<PageLogin>("${Route.Login.routeName}/{${ARGS_KEY}}?") {
+            fragment<PageLogin>("${Route.Login.routeName}/{${args_string}}?") {
                 label = "Login"
                 argument(ARGS_KEY) {
                     type = androidx.navigation.NavType.StringType
@@ -35,9 +39,27 @@ class KDslNavigationBuilder :  NavGraphContentLambdaBuilder,NavigationBuilder {
                 }
                 deepLink { uriPattern = Route.Login.deepLinkUri } // 示例
                 deepLink { uriPattern = NavDestination.createRoute(Route.Login.routeName) }
+
+//                action(0x9999) {
+//                    destinationId = R.id.xxxxx
+//                    navOptions {
+//                        anim {
+//                            enter = R.anim.slide_in_right
+//                            exit = R.anim.slide_out_left
+//                            popEnter = R.anim.slide_in_left
+//                            popExit = R.anim.slide_out_right
+//                        }
+//                        popUpTo(Route.Login.routeName) {
+////                        popUpTo(R.id.cccccc) {
+//                            inclusive = true
+//                        }
+//                        launchSingleTop = true // 如果目标已在栈顶，则不重新创建
+//                    }
+//                    defaultArguments.put("key1", "value")
+//                }
             }
 
-            fragment<PageNews>("${Route.News.routeName}/{${ARGS_KEY}}?") {
+            fragment<PageNews>("${Route.News.routeName}/{${args_string}}?") {
                 label = "NewsPage"
                 argument(ARGS_KEY) {
                     type = androidx.navigation.NavType.StringType
