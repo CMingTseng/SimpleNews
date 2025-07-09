@@ -25,7 +25,7 @@ class KDslNavigationBuilder : NavGraphContentLambdaBuilder {
     }
     override fun defineGraphContent(
         navController: NavController,
-        startDestId: Route,
+        startDest: Route,
         args_string: String? ,
         graphResId: Int?
     ): NavGraphBuilder.() -> Unit {

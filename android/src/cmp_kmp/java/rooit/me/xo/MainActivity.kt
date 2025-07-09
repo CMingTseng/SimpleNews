@@ -33,11 +33,11 @@ class MainActivity : AppCompatActivity() {
             ) { innerPadding ->
                 NavHost(
                     navController = navController,
-                    startDestination = Route.Splash.routeName,
+                    startDestination = "${Route.Splash.routeName}/${args_string}",
                     modifier = Modifier.padding(innerPadding),
                     builder = KDslNavigationBuilder().defineGraphContent(
                         navController = navController,
-                        startDestId = Route.Splash,
+                        startDest = Route.Splash,
                         args_string=args_string
                     )
                 )
