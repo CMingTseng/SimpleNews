@@ -43,3 +43,30 @@ fun Bundle.toJsonString(): String {
     }
     return Json.encodeToString(JsonObject.serializer(), json)
 }
+
+fun Bundle.toUriJsonString(): String {
+    val json = buildJsonObject {
+        keySet().forEach { key ->
+            when (val value = get(key)) {
+                is Int -> put(key, value)
+                is String -> put(key, value)
+                is Boolean -> put(key, value)
+                is Long -> put(key, value)
+                is Double -> put(key, value)
+                is Float -> put(key, value.toDouble())
+                is ArrayList<*> -> {
+                    putJsonArray(key) {
+                        value.forEach { element ->
+                            if (element is String) add(element)
+                        }
+                    }
+                }
+                else -> {
+                    // 其他型態可再擴充
+                    put(key, value.toString())
+                }
+            }
+        }
+    }
+    return Uri.encode(Json.encodeToString(JsonObject.serializer(), json))
+}

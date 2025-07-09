@@ -77,7 +77,7 @@ class KDslNavigationBuilder :  NavGraphContentLambdaBuilder,NavigationBuilder {
                     }
                 )
                 // 支持外部 app scheme
-                deepLink { uriPattern = Route.News.deepLinkUri }
+                deepLink { uriPattern = Route.Login.deepLinkUri }
                 // 支持內部 createRoute 生成的 URI
                 deepLink { uriPattern = NavDestination.createRoute(Route.Login.routeName) }
             }
