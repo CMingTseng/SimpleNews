@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/login_graph"
-    app:startDestination="@+id/login_step1">
+    app:startDestination="@id/login_step1">
 
     <fragment
         android:id="@+id/login_step1"
@@ -10,7 +10,7 @@
         android:label="PageLogin"
         tools:layout="@layout/page_login" >
         <action
-            android:id="@id/action_Login_to_News"
+            android:id="@+id/action_Login_to_News"
             app:destination="@id/news_graph"
             app:popUpTo="@id/login_step1"
             app:popUpToInclusive="true" />

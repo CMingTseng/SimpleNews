@@ -1,6 +1,5 @@
 package rooit.me.xo.navigation
 
-import android.os.Bundle
 import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
@@ -31,6 +30,11 @@ class KDslNavigationBuilder : NavGraphContentLambdaBuilder, NavigationBuilder {
                 deepLink { uriPattern = NavDestination.createRoute(Route.Splash.routeName) }
             }
 
+//            fragment<PageSplash>(Route.Splash.id) {//Int type
+//                label = "Splash" // 或者直接 "Splash"
+//                deepLink { uriPattern = Route.Splash.deepLinkUri }
+//            }
+
             fragment<PageLogin>("${Route.Login.routeName}/{${args_string}}?") {
                 label = "Login"
                 argument(ARGS_KEY) {
@@ -39,7 +43,6 @@ class KDslNavigationBuilder : NavGraphContentLambdaBuilder, NavigationBuilder {
                 }
                 deepLink { uriPattern = Route.Login.deepLinkUri } // 示例
                 deepLink { uriPattern = NavDestination.createRoute(Route.Login.routeName) }
-
 //                action(0x9999) {
 //                    destinationId = R.id.xxxxx
 //                    navOptions {
@@ -73,9 +76,13 @@ class KDslNavigationBuilder : NavGraphContentLambdaBuilder, NavigationBuilder {
 
     override fun build(
         navController: NavController,
-        startDestId: Route,
+        startDest: Route,
         graphResId: Int?
     ): NavGraph {
+//        return navController.createGraph(//TODO direct use defineGraphContent
+//            startDestination = startDest.routeName,
+//            route = "all_graph",
+//            builder = defineGraphContent(navController, startDest, null, graphResId) )
         return navController.createGraph(
             startDestination = Route.Splash.routeName,
             route = "all_graph"

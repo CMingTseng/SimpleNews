@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/splash_graph"
-    app:startDestination="@+id/splash_step1">
+    app:startDestination="@id/splash_step1">
 
     <fragment
         android:id="@+id/splash_step1"
@@ -10,14 +10,14 @@
         android:label="PageSplash"
         tools:layout="@layout/fragment_splash">
         <action
-            android:id="@id/action_Splash_to_Login"
+            android:id="@+id/action_Splash_to_Login"
             app:destination="@id/login_graph"
-            app:popUpTo="@+id/splash_step1"
+            app:popUpTo="@id/splash_step1"
             app:popUpToInclusive="true" />
         <action
-            android:id="@id/action_Splash_to_Main"
+            android:id="@+id/action_Splash_to_Main"
             app:destination="@id/news_graph"
-            app:popUpTo="@+id/splash_step1"
+            app:popUpTo="@id/splash_step1"
             app:popUpToInclusive="true" />
     </fragment>
     <include app:graph="@navigation/navi_login" />
