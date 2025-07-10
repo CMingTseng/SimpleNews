@@ -10,6 +10,13 @@ pluginManagement {
                 includeGroupByRegex("androidx.*")
             }
         }
+        maven {
+            url = uri("https://oss.sonatype.org/content/repositories/snapshots")
+            name = "SonatypeSnapshots"
+            mavenContent {
+                snapshotsOnly()
+            }
+        }
         maven(url = "https://maven.aliyun.com/repository/gradle-plugin/")
         maven(url = "https://maven.aliyun.com/repository/spring-plugin/")
         maven(url = "https://jitpack.io")
@@ -36,6 +43,13 @@ dependencyResolutionManagement {
     repositories {
         mavenCentral()
         google()
+        maven {
+            url = uri("https://oss.sonatype.org/content/repositories/snapshots")
+            name = "SonatypeSnapshots"
+            mavenContent {
+                snapshotsOnly()
+            }
+        }
         maven(url = "https://jitpack.io")
         maven(url = "https://s3.amazonaws.com/repo.commonsware.com")
         maven(url = "https://maven.pkg.jetbrains.space/public/p/compose/dev")

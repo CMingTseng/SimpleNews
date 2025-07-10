@@ -30,7 +30,7 @@ android {
 
     namespace 'rooit.me.xo'
     defaultConfig {
-        applicationId "rooit.me.xo"
+        applicationId "rooit.me.xo.app"
         minSdk 21
         targetSdk 36
         versionCode 1
@@ -170,6 +170,8 @@ dependencies {
     implementation(libs.de.ktorfit.converters.flow)
     implementation libs.glide
     ksp libs.glide.ksp
+
+    implementation (libs.urlencoder.lib)
 
     implementation libs.realm.kotlin.base
 //    implementation libs.realm.kotlin.sync

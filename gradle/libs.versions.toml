@@ -116,6 +116,7 @@ datetime = "0.7.0"
 lottieCompose = "6.6.7"
 richeditorCompose = "1.0.0-rc13"
 kermit = "2.0.6"
+urlencoder="1.6.0"
 #endregion
 
 junit = "4.13.2"
@@ -390,7 +391,8 @@ composeView = { module = "io.github.ltttttttttttt:ComposeViews", version.ref = "
 
 stately = { module = "co.touchlab:stately-common", version="2.1.0" }
 skiko = { module = "org.jetbrains.skiko:skiko-awt-runtime-macos-arm64", version="0.9.21" }
-
+#https://github.com/ethauvin/urlencoder replace android.net.Uri
+urlencoder-lib= { module = "net.thauvin.erik.urlencoder:urlencoder-lib", version.ref = "urlencoder" }
 settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "settings" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 kmpio = { module = "io.github.skolson:kmp-io", version.ref = "kmp_io_version" }

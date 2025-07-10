@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navDeepLink
 import kotlinx.coroutines.flow.StateFlow
+import net.thauvin.erik.urlencoder.UrlEncoderUtil
 import rooit.me.xo.route.Route
 import rooit.me.xo.route.Route.Companion.ARGS_KEY
 import rooit.me.xo.ui.login.PageLogin
@@ -47,7 +48,8 @@ class KDslNavigationBuilder : NavGraphContentLambdaBuilder {
                 val receivedJsonArgs = backStackEntry.arguments?.getString(Route.ARGS_KEY)
                 PageSplash(
                     onNavigateToLogin = { result->
-                        navController.navigate("${Route.Login.routeName}/${result}") {
+                        val stringToEncode = result ?: ""
+                        navController.navigate("${Route.Login.routeName}/${UrlEncoderUtil.encode(stringToEncode)}") {
 //                                    popUpTo("${Route.Splash.routeName}/") { inclusive = true }
                             navController.graph.startDestinationRoute?.let { startRoute ->
                                 popUpTo(startRoute) {
@@ -58,7 +60,8 @@ class KDslNavigationBuilder : NavGraphContentLambdaBuilder {
                         }
                     },
                     onNavigateToNews = {result->
-                        navController.navigate("${Route.News.routeName}/${result}") {
+                        val stringToEncode = result ?: ""
+                        navController.navigate("${Route.News.routeName}/${UrlEncoderUtil.encode(stringToEncode)}") {
                             popUpTo("${Route.Splash.routeName}/${args_string}") { inclusive = true }
 //                                    navController.graph.startDestinationRoute?.let { startRoute ->
 //                                        popUpTo(startRoute) {
@@ -95,6 +98,7 @@ class KDslNavigationBuilder : NavGraphContentLambdaBuilder {
                 Timber.e("NavigationArgs  show returnedData : $returnedNewsTitle")
                 PageLogin(
                     onNavigateToNews = {result->
+                        val stringToEncode = result ?: ""
                         Timber.e("NavigationArgs  login  Processed: $result")
                         // 清除 SavedStateHandle 中的值，以便下次即使相同的值也能觸發更新
                         // 注意：getStateFlow 的一個行為特性是，如果鍵不存在，它會使用初始值創建並返回 Flow。
@@ -102,7 +106,7 @@ class KDslNavigationBuilder : NavGraphContentLambdaBuilder {
                         backStackEntry.savedStateHandle.remove<String>(NEWS_ITEM_CLICKED_TITLE_KEY)
                         // 或者，如果想讓它回到 "無數據" 狀態，可以再次 set 成初始值：
                         // backStackEntry.savedStateHandle[NEWS_ITEM_CLICKED_TITLE_KEY] = NO_DATA_RETURNED
-                        navController.navigate("${Route.News.routeName}/${result}") {
+                        navController.navigate("${Route.News.routeName}/${UrlEncoderUtil.encode(stringToEncode)}") {
                             popUpTo("${Route.Login.routeName}/${receivedJsonArgs}") {
                                 inclusive = true
                             }
