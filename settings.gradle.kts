@@ -79,4 +79,4 @@ val currentJdk = if (versionComponents[0] == 1) versionComponents[1] else versio
 rootProject.name = "SimpleNews"
 include(":app")
 project(":app").projectDir = File("./android")
- 
+include(":shared")

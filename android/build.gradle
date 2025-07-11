@@ -1,9 +1,9 @@
 plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
+    id("com.android.application")
+    id("kotlin-android")
     alias(libs.plugins.ksp)
-    id "org.jetbrains.kotlin.plugin.serialization"
-    id "io.realm.kotlin"
+    id("org.jetbrains.kotlin.plugin.serialization")
+    id("io.realm.kotlin")
     id("de.jensklingenberg.ktorfit")
     alias(libs.plugins.kotlin.compose)
 }
@@ -28,7 +28,7 @@ android {
         flavorDimensions = ["product_code"]
     }
 
-    namespace 'rooit.me.xo'
+    namespace 'rooit.me.xo.app'
     defaultConfig {
         applicationId "rooit.me.xo.app"
         minSdk 21
@@ -72,21 +72,25 @@ android {
             getIsDefault().set(true)
             dimension "product_code"
             dependencies {
-                implementation libs.androidx.fragment.ktx
-                implementation libs.material
-                implementation libs.androidx.constraintlayout
-                implementation libs.androidx.navigation.fragment.ktx
-                implementation libs.splashscreen
+                implementation(libs.androidx.fragment.ktx)
+                implementation(libs.material)
+                implementation(libs.androidx.constraintlayout)
+                implementation(libs.androidx.navigation.fragment.ktx)
+                implementation(libs.splashscreen)
+                implementation(libs.androidx.lifecycle.livedata.ktx)
                 implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
-                implementation libs.glide
-                ksp libs.glide.ksp
-                implementation libs.koin.android
+                implementation(libs.glide)
+                ksp(libs.glide.ksp)
+                implementation(libs.koin.android)
+//                debugImplementation project(path: ':shared', configuration: 'legacy_navDebug')
+//                releaseImplementation project(path: ':shared', configuration: 'legacy_navRelease')
             }
         }
 
         cmp_kmp {
             dimension "product_code"
             dependencies {
+                implementation(libs.androidx.navigation.fragment.ktx)
                 implementation(libs.androidx.lifecycle.runtime.ktx)
                 implementation(libs.androidx.lifecycle.runtime.compose)
 
@@ -113,6 +117,8 @@ android {
                 implementation(libs.coil.compose.core)
                 implementation(libs.coil.network.ktor3)
                 implementation(libs.coil.svg)
+//                debugImplementation project(path: ':shared', configuration: 'cmp_kmpDebug')
+//                releaseImplementation project(path: ':shared', configuration: 'cmp_kmpRelease')
             }
         }
     }
@@ -137,26 +143,22 @@ android {
 }
 
 dependencies {
-    implementation libs.kotlinx.serialization
-    implementation libs.kotlinx.serialization.json
-    implementation libs.kotlinx.coroutines
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.kotlinx.serialization)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.coroutines)
 
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.activity.ktx)
 
-    implementation libs.androidx.core.ktx
-    implementation libs.androidx.appcompat
-    implementation libs.androidx.activity.ktx
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
-    implementation libs.androidx.lifecycle.livedata.ktx
-    implementation libs.androidx.lifecycle.viewmodel.ktx
+    implementation(libs.androidx.navigation.ui.ktx)
 
-    implementation libs.androidx.navigation.ui.ktx
-    implementation libs.androidx.navigation.fragment.ktx
-    implementation libs.splashscreen
-    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
+    implementation(libs.timber)
 
-    implementation libs.timber
-
-    implementation libs.koin.core
+    implementation(libs.koin.core)
 
     implementation(libs.ktor.client.cio)
     implementation(libs.ktor.client.json)
@@ -168,15 +170,34 @@ dependencies {
     implementation(libs.de.ktorfit)
     implementation(libs.de.ktorfit.converters.call)
     implementation(libs.de.ktorfit.converters.flow)
-    implementation libs.glide
-    ksp libs.glide.ksp
 
-    implementation (libs.urlencoder.lib)
+    implementation(libs.urlencoder.lib)
 
-    implementation libs.realm.kotlin.base
-//    implementation libs.realm.kotlin.sync
+    implementation(libs.realm.kotlin.base)
+//    implementation (libs.realm.kotlin.sync)
 
-    testImplementation libs.junit
-    androidTestImplementation libs.androidx.junit
-    androidTestImplementation libs.androidx.espresso.core
+    implementation project(':shared')
+     /*
+     //kts
+     // 通用依赖
+    implementation(project(":shared")) // 如果有通用代码需要依赖
+
+     // Flavor-specific dependencies
+     // app的 legacy_navDebug 会依赖 shared的 legacy_navDebug
+     // app的 legacy_navRelease 会依赖 shared的 legacy_navRelease
+     add("legacy_navImplementation", project(mapOf("path" to ":shared", "configuration" to "legacy_navRelease")))
+     // 或者，如果你想更精确地匹配构建类型 (虽然通常 release 依赖 release, debug 依赖 debug 是自动的)
+     // add("legacy_navDebugImplementation", project(mapOf("path" to ":shared", "configuration" to "legacy_navDebug")))
+     // add("legacy_navReleaseImplementation", project(mapOf("path" to ":shared", "configuration" to "legacy_navRelease")))
+
+
+     // app的 cmp_kmpDebug 会依赖 shared的 cmp_kmpDebug
+     // app的 cmp_kmpRelease 会依赖 shared的 cmp_kmpRelease
+     add("cmp_kmpImplementation", project(mapOf("path" to ":shared", "configuration" to "cmp_kmpRelease")))
+     // add("cmp_kmpDebugImplementation", project(mapOf("path" to ":shared", "configuration" to "cmp_kmpDebug")))
+     // add("cmp_kmpReleaseImplementation", project(mapOf("path" to ":shared", "configuration" to "cmp_kmpRelease")))
+     */
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 }

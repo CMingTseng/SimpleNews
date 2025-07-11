@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:theme="@style/Theme.SimpleNews"
+        tools:targetApi="31"
+        tools:ignore="MissingApplicationIcon">
+        <activity
+            android:name="rooit.me.xo.MainActivity"
+            android:theme="@style/Theme.SimpleNews">
+        </activity>
+    </application>
+
+</manifest>

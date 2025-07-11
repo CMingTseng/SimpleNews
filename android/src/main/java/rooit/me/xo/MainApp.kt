@@ -5,6 +5,8 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
+import rooit.me.xo.app.BuildConfig
+import rooit.me.xo.di.AppInfoModule
 import rooit.me.xo.di.NetworkModule
 import rooit.me.xo.di.apiModule
 import rooit.me.xo.di.dbModule
@@ -30,6 +32,7 @@ class MainApp : Application() {
             // Load modules
 //            modules(NetworkModule)
             modules(listOf(
+                AppInfoModule,
                 NetworkModule,
                 apiModule,
                 repositoryModule,
