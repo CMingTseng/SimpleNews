@@ -1,0 +1,94 @@
+plugins {
+    id("com.android.library")
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
+    id ("org.jetbrains.kotlin.plugin.serialization")
+    id("io.realm.kotlin")
+}
+
+android {
+    namespace 'rooit.me.xo'
+    compileSdk 36
+    lintOptions {
+        warningsAsErrors true
+        abortOnError true
+        disable 'MissingTranslation',
+                'ExtraTranslation',
+                'TypographyEllipsis',
+                'UnspecifiedImmutableFlag',
+                'UnusedResources',
+                'TypographyDashes'
+    }
+
+    buildFeatures {
+        viewBinding true
+        buildConfig true
+        compose false 
+    }
+
+    defaultConfig {
+        minSdk 21
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        debug {
+            matchingFallbacks = ['release', 'debug']
+            minifyEnabled false
+            shrinkResources false
+            debuggable true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-system-common.pro', 'proguard-third-party.pro', 'proguard-module.pro'
+        }
+        release {
+            matchingFallbacks = ['release', 'debug']
+            minifyEnabled false
+            shrinkResources false
+            debuggable false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+}
+
+dependencies {
+    implementation(libs.kotlin.stdlib)
+    implementation(libs.kotlinx.serialization)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.kotlinx.coroutines)
+
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.fragment.ktx)
+    implementation(libs.material)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.splashscreen)
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
+
+    implementation(project(":common"))
+
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+
+    implementation(libs.timber)
+    implementation(libs.glide)
+    ksp(libs.glide.ksp)
+
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
+}

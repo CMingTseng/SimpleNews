@@ -82,6 +82,7 @@ android {
                 implementation(libs.glide)
                 ksp(libs.glide.ksp)
                 implementation(libs.koin.android)
+
 //                debugImplementation project(path: ':shared', configuration: 'legacy_navDebug')
 //                releaseImplementation project(path: ':shared', configuration: 'legacy_navRelease')
             }
@@ -117,27 +118,10 @@ android {
                 implementation(libs.coil.compose.core)
                 implementation(libs.coil.network.ktor3)
                 implementation(libs.coil.svg)
+
 //                debugImplementation project(path: ':shared', configuration: 'cmp_kmpDebug')
 //                releaseImplementation project(path: ':shared', configuration: 'cmp_kmpRelease')
             }
-        }
-    }
-
-    sourceSets {
-        main {
-            java.srcDirs = ['src/main/java']
-            res.srcDirs = ['src/main/res']
-            manifest.srcFile 'src/main/AndroidManifest.xml'
-        }
-        legacy_nav {
-            java.srcDirs = ['src/legacy_nav/java']
-            res.srcDirs = ['src/legacy_nav/res']
-            manifest.srcFile 'src/legacy_nav/AndroidManifest.xml'
-        }
-        cmp_kmp {
-            java.srcDirs = ['src/cmp_kmp/java']
-            res.srcDirs = ['src/cmp_kmp/res']
-            manifest.srcFile 'src/cmp_kmp/AndroidManifest.xml'
         }
     }
 }
@@ -176,23 +160,25 @@ dependencies {
     implementation(libs.realm.kotlin.base)
 //    implementation (libs.realm.kotlin.sync)
 
-    implementation project(':shared')
+    legacy_navImplementation project(':legacy_nav')
+    cmp_kmpImplementation project(':shared')
+    implementation project(':common')
      /*
      //kts
-     // 通用依赖
-    implementation(project(":shared")) // 如果有通用代码需要依赖
+     // general dependencies
+    implementation(project(":shared"))
 
      // Flavor-specific dependencies
-     // app的 legacy_navDebug 会依赖 shared的 legacy_navDebug
-     // app的 legacy_navRelease 会依赖 shared的 legacy_navRelease
+     // app的 legacy_navDebug auto dependencies shared的 legacy_navDebug
+     // app的 legacy_navRelease auto dependencies shared的 legacy_navRelease
      add("legacy_navImplementation", project(mapOf("path" to ":shared", "configuration" to "legacy_navRelease")))
-     // 或者，如果你想更精确地匹配构建类型 (虽然通常 release 依赖 release, debug 依赖 debug 是自动的)
+     /
      // add("legacy_navDebugImplementation", project(mapOf("path" to ":shared", "configuration" to "legacy_navDebug")))
      // add("legacy_navReleaseImplementation", project(mapOf("path" to ":shared", "configuration" to "legacy_navRelease")))
 
 
-     // app的 cmp_kmpDebug 会依赖 shared的 cmp_kmpDebug
-     // app的 cmp_kmpRelease 会依赖 shared的 cmp_kmpRelease
+     // app的 cmp_kmpDebug auto dependencies shared的 cmp_kmpDebug
+     // app的 cmp_kmpRelease auto dependencies shared的 cmp_kmpRelease
      add("cmp_kmpImplementation", project(mapOf("path" to ":shared", "configuration" to "cmp_kmpRelease")))
      // add("cmp_kmpDebugImplementation", project(mapOf("path" to ":shared", "configuration" to "cmp_kmpDebug")))
      // add("cmp_kmpReleaseImplementation", project(mapOf("path" to ":shared", "configuration" to "cmp_kmpRelease")))

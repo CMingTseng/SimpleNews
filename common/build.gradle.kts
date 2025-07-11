@@ -4,6 +4,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     id ("org.jetbrains.kotlin.plugin.serialization")
+    id ("io.realm.kotlin")
+    id("de.jensklingenberg.ktorfit")
 }
 
 android {
@@ -22,13 +24,6 @@ android {
                 "TypographyDashes"
             )
         )
-        //
-        // disable("MissingTranslation",
-        //         "ExtraTranslation",
-        //         "TypographyEllipsis",
-        //         "UnspecifiedImmutableFlag",
-        //         "UnusedResources",
-        //         "TypographyDashes")
     }
 
     buildFeatures {
@@ -44,7 +39,6 @@ android {
         consumerProguardFiles("consumer-rules.pro")
     }
 
-    //FIXME !! Ref : Android Gradle Plugin 7 LibraryBuildType no longer has isDebuggable property
     buildTypes {//TODO Ref : https://developer.android.com/reference/tools/gradle-api/8.3/null/com/android/build/api/dsl/BuildType
         getByName("debug") {
             matchingFallbacks.addAll(listOf("release", "debug")) //    matchingFallbacks = listOf("release", "debug")
@@ -57,14 +51,8 @@ android {
                 "proguard-third-party.pro",
                 "proguard-module.pro"
             )
-
-            // proguardFiles = mutableListOf(
-            //     getDefaultProguardFile("proguard-android.txt"),
-            //     "proguard-system-common.pro",
-            //     "proguard-third-party.pro",
-            //     "proguard-module.pro"
-            // )
         }
+
         getByName("release") {
             matchingFallbacks.addAll(listOf("release", "debug")) //    matchingFallbacks = listOf("release", "debug")
             isMinifyEnabled = false
@@ -75,15 +63,6 @@ android {
                 "proguard-rules.pro"
             )
         }
-
-        /*
-        create("staging") {
-            initWith(getByName("debug"))
-            applicationIdSuffix = ".staging"
-            isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules-staging.pro")
-        }
-        */
     }
 
     compileOptions {
@@ -105,6 +84,26 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.navigation.ui.ktx)
+
+    implementation(libs.timber)
+
+    implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.client.json)
+    implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.client.serialization)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.json)
+
+    implementation(libs.de.ktorfit)
+    implementation(libs.de.ktorfit.converters.call)
+    implementation(libs.de.ktorfit.converters.flow)
+
+    implementation(libs.androidx.navigation.fragment.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -112,11 +111,8 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.foundation)
-
     implementation(libs.androidx.compose.material)
     implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.navigation.compose)
-
 
     implementation(libs.koin.core)
     implementation(libs.koin.android)
@@ -126,16 +122,7 @@ dependencies {
     implementation(libs.koin.compose.viewmodel)
     implementation(libs.koin.compose.viewmodel.navigation)
 
-    implementation(libs.coil.core)
-    implementation(libs.coil)
-    implementation(libs.coil.compose)
-    implementation(libs.coil.compose.core)
-    implementation(libs.coil.network.ktor3)
-    implementation(libs.coil.svg)
-    implementation(project(":common"))
-    implementation(libs.urlencoder.lib)
-
-    implementation(libs.timber)
+    implementation(libs.realm.kotlin.base)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
