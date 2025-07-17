@@ -20,6 +20,7 @@
  [Issue_1857] 
  [reddit] 
  [从 Realm 迁移到 SQLDelight]
+- 真的要在kotlin 2.1.x以上用Realm目前暫時替代的是用mavenLocal的[krdb]不過還是建議棄坑快逃了
 - Glide 在ksp需使用com.github.bumptech.glide:ksp  [kapt-->ksp]
 
 # 改用 StateFlow 取代 LiveData : 
@@ -40,5 +41,5 @@
   [reddit]: <https://www.reddit.com/r/androiddev/comments/1fg13ov/comment/ln07lzo/>
   [从 Realm 迁移到 SQLDelight]: <https://segmentfault.com/a/1190000046550165>
   [kapt-->ksp]: <https://www.linkedin.com/posts/rezyfr_migrate-from-kapt-to-ksp-android-studio-activity-7090913619143524352-aOyr?utm_source=share&utm_medium=member_desktop>
-
+  [krdb]: <https://github.com/XilinJia/krdb>
 
