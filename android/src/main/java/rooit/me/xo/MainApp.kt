@@ -9,7 +9,8 @@ import rooit.me.xo.app.BuildConfig
 import rooit.me.xo.di.AppInfoModule
 import rooit.me.xo.di.NetworkModule
 import rooit.me.xo.di.apiModule
-import rooit.me.xo.di.dbModule
+import rooit.me.xo.di.gatewayModule
+import rooit.me.xo.di.getDatabaseModule
 import rooit.me.xo.di.repositoryModule
 import rooit.me.xo.di.viewModelModule
 import timber.log.Timber
@@ -37,7 +38,8 @@ class MainApp : Application() {
                 apiModule,
                 repositoryModule,
                 viewModelModule,
-                dbModule
+                gatewayModule,
+                getDatabaseModule()
             ))
         }
 

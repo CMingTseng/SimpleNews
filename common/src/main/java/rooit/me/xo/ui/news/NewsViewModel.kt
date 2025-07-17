@@ -1,51 +1,32 @@
 package rooit.me.xo.ui.news
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.io.IOException
 import rooit.me.xo.repository.NewsRepository
-import timber.log.Timber
 
 class NewsViewModel(private val repo: NewsRepository, private val apikey: String) : ViewModel() {
     private val _uiState = MutableStateFlow(NewsUiState())
     val uiState: StateFlow<NewsUiState> = _uiState.asStateFlow()
 
+    // 用於持有正在收集文章資料流的 Job，以便可以取消和重啟它
+    private var articlesJob: Job? = null
+
     init {
-        // Observe DB changes as the primary source of truth for the article list
-        observeDatabaseChanges()
-        // Trigger initial data load
+        // 觸發初始資料載入
         dispatch(NewsViewAction.InitialLoadOrRetry)
     }
 
-    private fun observeDatabaseChanges() {
-        viewModelScope.launch {
-            repo.observeArticlesFromDB()
-                .catch { e ->
-                    Timber.e(e, "Error observing DB changes")
-                    _uiState.update { it.copy(userMessage = "Database error: ${e.localizedMessage}") }
-                }
-                .collectLatest { articlesFromDb ->
-                    _uiState.update { currentState ->
-                        currentState.copy(
-                            articles = articlesFromDb,
-                            // isLoading might be true due to network fetch, don't override it here
-                            // unless DB emitting means loading is done.
-                            // isRefreshing is handled by network calls.
-                            userMessage = if (articlesFromDb.isEmpty() && !currentState.isLoading && !currentState.isRefreshing) "No news available." else null
-                        )
-                    }
-                }
-        }
-    }
-
+    /**
+     * 處理來自 UI 的所有操作。
+     */
     fun dispatch(action: NewsViewAction) {
         when (action) {
             NewsViewAction.InitialLoadOrRetry -> loadNews(isRefresh = false)
@@ -53,47 +34,51 @@ class NewsViewModel(private val repo: NewsRepository, private val apikey: String
         }
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
+    /**
+     * 核心函式，負責訂閱和更新新聞資料。
+     * 每次呼叫時，它會取消先前的訂閱並建立一個新的，從而有效地觸發刷新。
+     *
+     * @param isRefresh 指示這次載入是否由下拉刷新觸發。
+     */
     private fun loadNews(isRefresh: Boolean) {
-        // Prevent multiple simultaneous loads unless it's a forced refresh
-        if ((_uiState.value.isLoading || _uiState.value.isRefreshing) && !isRefresh && !repo.isCurrentlyFetchingFromNetwork()) {
-            Timber.d("Load/Refresh in progress, skipping.")
-            return
-        }
-
-        viewModelScope.launch {
+        // 1. 取消上一個正在執行的 Job，以防重複載入
+//        articlesJob?.cancel()
+        Log.e("NewsViewModel","Show me loadNews ")
+        // 2. 啟動一個新的協程來收集資料流
+        articlesJob = viewModelScope.launch {
+            // 3. 立即更新 UI 狀態以顯示載入指示器
             _uiState.update {
-                if (isRefresh) it.copy(isRefreshing = true, userMessage = null)
-                else it.copy(isLoading = true, userMessage = null)
+                it.copy(
+                    isLoading = !isRefresh,
+                    isRefreshing = isRefresh,
+                    userMessage = null
+                )
             }
-
-            try {
-                Timber.d("Attempting to fetch articles from network. Is refresh: $isRefresh")
-                val articlesFromNetwork = repo.fetchTopHeadlinesFromNetwork("us", apikey)
-                if (articlesFromNetwork.isNotEmpty()) {
-                    repo.syncArticlesToDB(articlesFromNetwork)
-                    Timber.d("Successfully fetched ${articlesFromNetwork.size} articles and synced to DB.")
-                    // DB observation will update the list
-                } else {
-                    Timber.d("Network fetch returned empty list or was skipped.")
-                    // If DB is also empty, it will be reflected by the DB observer
-                    if (_uiState.value.articles.isEmpty()){
-                        _uiState.update { it.copy(userMessage = "No new articles found from network.") }
+            Log.e("NewsViewModel","Show me getArticles ")
+            // 4. 呼叫 Repository 的單一入口函式
+            repo.getArticles("us", apikey)
+                .catch { e ->
+                    // 如果 Flow 本身發生無法恢復的錯誤（例如資料庫損壞），則捕獲它
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            isRefreshing = false,
+                            userMessage = "An unexpected error occurred: ${e.message}"
+                        )
                     }
                 }
-            } catch (e: IOException) {
-                Timber.e(e, "Network error during loadNews")
-                _uiState.update { it.copy(userMessage = "Network error. Please check your connection.") }
-            } catch (e: Exception) {
-                Timber.e(e, "Generic error during loadNews")
-                _uiState.update { it.copy(userMessage = "An unexpected error occurred.") }
-            } finally {
-                _uiState.update {
-                    if (isRefresh) it.copy(isRefreshing = false)
-                    else it.copy(isLoading = false)
+                .collect { articlesFromRepo ->
+                    // 5. 每次收到來自 Repository 的新資料列表時，更新 UI
+                    //    同時關閉載入/刷新指示器，因為資料已經呈現
+                    _uiState.update {
+                        it.copy(
+                            isLoading = false,
+                            isRefreshing = false,
+                            articles = articlesFromRepo,
+                            userMessage = if (articlesFromRepo.isEmpty() && !it.isLoading) "No news available." else null
+                        )
+                    }
                 }
-                Timber.d("loadNews finished. Is refresh: $isRefresh")
-            }
         }
     }
 }

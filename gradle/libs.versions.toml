@@ -1,9 +1,12 @@
 [versions]
 #region Base Plugin
-agp = "8.10.1" # Ref : https://developer.android.com/build/releases/past-releases
-kotlin = "2.0.20"
+agp = "8.11.0" # Ref : https://developer.android.com/build/releases/past-releases
+kotlin = "2.1.21"
 kotlinx-coroutines = "1.10.2"
-ksp = "2.0.20-1.0.25"
+#region Json &  Gson & Serialization
+kotlinx-serialization = "1.9.0"
+#endregion
+ksp = "2.1.21-2.0.1"#2.2.0-2.0.2
 #endregion
 
 #region AndroidX
@@ -16,14 +19,15 @@ androidx-material = "1.12.0"
 androidx-constraintlayout = "2.2.1"
 androidx-constraintlayout-compose = "1.1.1"
 androidx-lifecycle = "2.9.1"
+androidx-lifecycle-navigation3 = "1.0.0-alpha03"
 lifecycleLivedataKtx = "2.8.6"
 lifecycleViewmodelKtx = "2.8.6"
 lifecycleRuntimeKtx = "2.8.6"
 androidx-navigation = "2.9.1"
-navigationFragmentKtx = "2.8.2"
-navigationUiKtx = "2.8.2"
+androidx-navigation3 = "1.0.0-alpha05"
 androidx-splashscreen = "1.0.1"
-androidx-pagging = "3.3.6"
+androidx-paging = "3.3.6"
+datastore = "1.1.7"
 jetpack_windowmanager_version = '1.0.0'
 jetpack_camera_version = '1.1.0'
 #endregion
@@ -37,7 +41,9 @@ androidx-compose-material3 = "1.3.2"
 androidx-compose-material3-adaptive = "1.1.0"
 jetbrains-compose-multiplatform = "1.8.2"
 jetbrains-compose-hot-reload = "1.0.0-beta03"
+# https://mvnrepository.com/artifact/org.jetbrains.androidx.lifecycle/lifecycle-viewmodel-compose
 jetbrains-lifecycle = "2.9.1"
+# https://mvnrepository.com/artifact/org.jetbrains.androidx.navigation/navigation-compose
 jetbrains-navigation = "2.9.0-beta03"
 #endregion
 
@@ -45,11 +51,6 @@ jetbrains-navigation = "2.9.0-beta03"
 
 #region DI
 koin = "4.0.4"
-
-#endregion
-
-#region Json &  Gson & Serialization
-kotlinx-serialization = "1.8.1"
 #endregion
 
 #region BuildConfig
@@ -60,10 +61,10 @@ buildConfig = "5.6.7"
 #region Net
 ktor = "3.2.1"
 
-ktorfit = "2.1.0"
+ktorfit = "2.5.1"
 retrofit2 = "3.0.0"
 retrofit2_kotlinx_serialization_converter = "1.0.0"
-okhttp = "5.0.0"
+okhttp = "5.1.0"
 #endregion
 
 #region Permissions
@@ -77,7 +78,7 @@ pagingComposeCommon = "3.3.0-alpha02-0.5.1"
 
 #region Image
 coil = "3.2.0"
-kamelImage = "1.0.6"
+kamelImage = "1.0.7"
 glide = "4.16.0"
 #endregion
 #region MediaPlayer
@@ -113,11 +114,17 @@ moleculeRuntime = "2.1.0"
 
 composeView = "1.8.0.1"
 settings = "1.3.0"
-datetime = "0.7.0"
+kotlinx-datetime = "0.7.1"
 lottieCompose = "6.6.7"
 richeditorCompose = "1.0.0-rc13"
 kermit = "2.0.6"
 urlencoder="1.6.0"
+skie = "0.10.4"
+atomicfu = "0.29.0"
+filekit = "0.10.0-beta04"
+desugaring = "2.1.5"
+chucker = "4.1.0"
+vico = "2.1.3"
 #endregion
 
 junit = "4.13.2"
@@ -147,11 +154,11 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 de-ktorfit = { id = "de.jensklingenberg.ktorfit", version.ref = "ktorfit" }
 buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildKonfig" }
 buildConfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildConfig" }
+skie = { id = "co.touchlab.skie", version.ref = "skie" }
 room = { id = "androidx.room", version.ref = "room" }
 vlcSetup = { id = "ir.mahozad.vlc-setup", version.ref = "vlcSetup" }
 realm = { id = "io.realm:realm-gradle-plugin", version.ref = "realm_version" }
 realm_kotlin = { id = "io.realm.kotlin", version.ref = "realm_kotlin_version" }
-
 
 [libraries]
 plugin-source-android = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -159,11 +166,11 @@ plugin-source-kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", v
 
 #region Base
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
-kotlinx-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref="kotlinx-coroutines" }
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref="kotlinx-coroutines" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref="kotlinx-coroutines" }
 kotlinx-coroutines-swing = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-swing", version.ref = "kotlinx-coroutines" }
 
-kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
+kotlinx-serialization-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinx-serialization" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinx-serialization" }
 #endregion
 
@@ -184,22 +191,23 @@ androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecy
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidx-lifecycle" }
 androidx-lifecycle-viewmodel-savedstate = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-savedstate", version.ref = "androidx-lifecycle" }
-androidx-lifecycle-viewmodel-navigation3 = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-navigation3", version.ref = "androidx-lifecycle" }
+androidx-lifecycle-viewmodel-navigation3 = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-navigation3", version.ref = "androidx-lifecycle-navigation3" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "androidx-lifecycle" }
 androidx-navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "androidx-navigation" }
 androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "androidx-navigation" }
 androidx-navigation-dynamic-features-fragment = { group = "androidx.navigation", name = "navigation-dynamic-features-fragment", version.ref = "androidx-navigation" }
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "androidx-navigation" }
-androidx-sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
-androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
-androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
-androidx-room-rxjava2 = { group = "androidx.room", name = "room-rxjava2", version.ref = "room" }
-androidx-room-rxjava3 = { group = "androidx.room", name = "room-rxjava3", version.ref = "room" }
-androidx-room-guava = { group = "androidx.room", name = "room-guava", version.ref = "room" }
-androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
-androidx-room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
-paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "androidx-pagging" }
-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidx-splashscreen" }
+androidx-navigation3-ui = { group = "androidx.navigation3", name = "navigation3-ui", version.ref = "androidx-navigation3" }
+androidx-navigation3-runtime = { group = "androidx.navigation3", name = "navigation3-runtime", version.ref = "androidx-navigation3" }
+
+androidx-paging-common = { module = "androidx.paging:paging-common", version.ref = "androidx-paging" }
+androidx-paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "androidx-paging" }
+androidx-paging-compose-android = { group = "androidx.paging", name = "paging-compose-android", version.ref = "androidx-paging" }
+androidx-preference = { module = "androidx.preference:preference-ktx", version = "1.2.1" }
+androidx-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidx-splashscreen" }
+# Permissions
+# https://github.com/google/accompanist
+permissions = { module = "com.google.accompanist:accompanist-permissions", version = "0.37.3" }
 #endregion
 
 #region androidx compose
@@ -245,8 +253,12 @@ androidx-compose-material3-adaptive-navigation = { module = "androidx.compose.ma
 #endregion
 
 #region jetbrains compose
+# https://github.com/JetBrains/compose-multiplatform
+jetbrains-compose-ui-backhandler = { module = "org.jetbrains.compose.ui:ui-backhandler", version.ref = "jetbrains-compose-multiplatform" }
 jetbrains-androidx-navigation-compose = { group = "org.jetbrains.androidx.navigation", name = "navigation-compose", version.ref = "jetbrains-navigation" }
 jetbrains-androidx-lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel", version.ref = "jetbrains-lifecycle" }
+jetbrains-androidx-lifecycle-viewmodel-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "jetbrains-lifecycle" }
+# https://mvnrepository.com/artifact/org.jetbrains.androidx.lifecycle/lifecycle-viewmodel-compose
 jetbrains-androidx-lifecycle-runtime-compose = { module = "org.jetbrains.androidx.lifecycle:lifecycle-runtime-compose", version.ref = "jetbrains-lifecycle" }
 #endregion
 #region compose nav
@@ -273,7 +285,6 @@ de-ktorfit-converters-response = { module = "de.jensklingenberg.ktorfit:ktorfit-
 de-ktorfit-converters-call = { module = "de.jensklingenberg.ktorfit:ktorfit-converters-call", version.ref = "ktorfit" }
 de-ktorfit-converters-flow = { module = "de.jensklingenberg.ktorfit:ktorfit-converters-flow", version.ref = "ktorfit" }
 
-
 okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
 
 ktor-client-core = {  module = "io.ktor:ktor-client-core", version.ref = "ktor" }
@@ -291,6 +302,7 @@ ktor-client-jsonjs = { module = "io.ktor:ktor-client-json-js", version.ref="ktor
 ktor-client-curl = { module = "io.ktor:ktor-client-curl", version.ref = "ktor" }
 ktor-client-winhttp = { module = "io.ktor:ktor-client-winhttp", version.ref = "ktor" }
 ktor-client-serialization = { module = "io.ktor:ktor-client-serialization", version.ref = "ktor" }
+ktor-client-websockets = { module = "io.ktor:ktor-client-websockets", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref="ktor" }
 ktor-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref="ktor" }
 ktor-serialization-gson = { module = "io.ktor:ktor-serialization-gson", version.ref = "ktor" }
@@ -378,6 +390,17 @@ vlcj = { group = "uk.co.caprica", name = "vlcj", version.ref = "vlcj" }
 realm_kotlin_base= { group = "io.realm.kotlin", name = "library-base", version.ref = "realm_kotlin_version" }
 realm_kotlin_sync= { group = "io.realm.kotlin", name = "library-sync", version.ref = "realm_kotlin_version" }
 
+androidx-datastore-core-okio = { group = "androidx.datastore", name = "datastore-core-okio", version.ref = "datastore" }
+androidx-datastore-preferences-core = { group = "androidx.datastore", name = "datastore-preferences-core", version.ref = "datastore" }
+androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+androidx-room-rxjava2 = { group = "androidx.room", name = "room-rxjava2", version.ref = "room" }
+androidx-room-rxjava3 = { group = "androidx.room", name = "room-rxjava3", version.ref = "room" }
+androidx-room-guava = { group = "androidx.room", name = "room-guava", version.ref = "room" }
+androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+androidx-room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
+sqlite-bundled = { group = "androidx.sqlite", name = "sqlite-bundled", version.ref = "sqlite" }
+
 sqlDelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqldelight" }
 sqlDelight-adapter = { module = "app.cash.sqldelight:primitive-adapters", version.ref = "sqldelight" }
 sqlDelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
@@ -389,6 +412,10 @@ sqlDelight-driver-sqlite = { module = "app.cash.sqldelight:sqlite-driver", versi
 logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
 napier = { module = "io.github.aakira:napier", version.ref = "napier" }
 timber= { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
+# Network logger
+# https://github.com/ChuckerTeam/chucker
+chucker = { module = "com.github.chuckerteam.chucker:library", version.ref = "chucker" }
+chucker-noop = { module = "com.github.chuckerteam.chucker:library-no-op", version.ref = "chucker" }
 #endregion
 
 #region Third_Party
@@ -403,8 +430,22 @@ skiko = { module = "org.jetbrains.skiko:skiko-awt-runtime-macos-arm64", version=
 #https://github.com/ethauvin/urlencoder replace android.net.Uri
 urlencoder-lib= { module = "net.thauvin.erik.urlencoder:urlencoder-lib", version.ref = "urlencoder" }
 settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "settings" }
-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
+kotlinx-atomicfu = { module = "org.jetbrains.kotlinx:atomicfu", version.ref = "atomicfu" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 kmpio = { module = "io.github.skolson:kmp-io", version.ref = "kmp_io_version" }
+# Charts
+# https://github.com/patrykandpatrick/vico
+vico-multiplatform = { group = "com.patrykandpatrick.vico", name = "multiplatform", version.ref = "vico" }
+vico-multiplatform-m3 = { group = "com.patrykandpatrick.vico", name = "multiplatform-m3", version.ref = "vico" }
+# PDF renderer
+# https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox
+pdfbox = { module = "org.apache.pdfbox:pdfbox", version = "3.0.5" }
+
+# File dialogs
+# https://github.com/vinceglb/FileKit
+filekit-core = { module = "io.github.vinceglb:filekit-core", version.ref = "filekit" }
+filekit-dialogs-compose = { module = "io.github.vinceglb:filekit-dialogs-compose", version.ref = "filekit" }
+
 #endregion
 #endregion
 

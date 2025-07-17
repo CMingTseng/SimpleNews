@@ -1,160 +1,118 @@
 package rooit.me.xo.repository
 
-import io.realm.kotlin.Realm
-import io.realm.kotlin.delete
-import io.realm.kotlin.ext.query
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import rooit.me.xo.api.NewsApi
+import rooit.me.xo.mappers.toDomain
+import rooit.me.xo.mappers.toEntity
 import rooit.me.xo.model.Article
-import rooit.me.xo.model.Source
-import rooit.me.xo.model.db.realm.ArticleRealm
-import rooit.me.xo.model.db.realm.SourceRealm
-import timber.log.Timber
-import java.io.IOException
-import java.util.concurrent.atomic.AtomicBoolean
+import rooit.me.xo.model.db.room.ArticleEntity
+import kotlinx.coroutines.flow.onStart
+import rooit.me.xo.gateway.ArticleLocalDataSource
 
-class NewsRepository(private val api: NewsApi, private val realm: Realm) {
-
-    // AtomicBoolean to prevent multiple simultaneous network fetches if needed by ViewModel logic
-    private val isCurrentlyFetchingNetwork = AtomicBoolean(false)
-
-    /**
-     * Observes articles from the local Realm database.
-     * Emits a list of domain Article objects.
-     */
-    fun observeArticlesFromDB(): Flow<List<Article>> = realm.query<ArticleRealm>().asFlow()
-        .map { resultsChange ->
-            // Map RealmResults to a plain list of ArticleRealm
-            resultsChange.list.toList() // Ensure it's a stable list for further mapping
-        }
-        .map { realmArticles ->
-            // Map ArticleRealm list to domain Article list
-            realmArticles.map { it.toDomain() }
-        }
-        .distinctUntilChanged() // Only emit if the list content actually changes
-        .flowOn(Dispatchers.Default) // Perform Realm operations and mapping on a background thread
+/**
+ * 負責處理新聞資料的單一來源 (Single Source of Truth)。
+ * 協調從遠端 API 和本地資料庫獲取資料。
+ *
+ * @param api 遠端新聞 API 的 Ktorfit 介面。
+ * @param localDataSource 本地資料庫的抽象介面。
+ */
+class NewsRepository(
+    private val api: NewsApi,
+    private val localDataSource: ArticleLocalDataSource
+) {
 
     /**
-     * Fetches top headlines from the network API.
-     * This is a suspend function that returns the result directly.
-     * The ViewModel will handle wrapping this in a Flow or error handling as needed.
+     * 獲取頭條新聞文章。
+     * 此函式返回一個 "冷" Flow，它會：
+     * 1. 首先立即發射本地資料庫中快取的文章。
+     * 2. 在 Flow 開始被收集時 (`onStart`)，觸發一次背景網路請求來獲取最新資料。
+     * 3. 網路請求成功後，將新資料寫入資料庫，這會自動觸發 Flow 發射更新後的文章列表。
+     *
+     * @param country 要查詢的國家代碼 (例如 "us")。
+     * @param apiKey 你的 NewsAPI 金鑰。
+     * @return 一個會持續發射文章列表的 Flow<List<Article>>。
      */
-    suspend fun fetchTopHeadlinesFromNetwork(country: String, apiKey: String): List<Article> {
-        // Simple guard against concurrent calls, can be more sophisticated
-        if (isCurrentlyFetchingNetwork.get()) {
-            Timber.d("Network fetch already in progress, skipping.")
-            return emptyList() // Or throw a specific exception if preferred
-        }
-        isCurrentlyFetchingNetwork.set(true)
-        try {
-            Timber.d("Fetching from network: country=$country")
-            val response = api.fetchTopHeadlines(country, apiKey) // Assuming this is your Retrofit call
-            return response.articles ?: emptyList()
-        } catch (e: IOException) {
-            Timber.e(e, "Network IOException while fetching headlines")
-            throw e // Re-throw to be caught by ViewModel
-        } catch (e: Exception) { // Catch other potential exceptions from API call
-            Timber.e(e, "General Exception while fetching headlines from network")
-            throw e // Re-throw
-        } finally {
-            isCurrentlyFetchingNetwork.set(false)
-        }
+    fun getArticles(country: String, apiKey: String): Flow<List<Article>> {
+        Log.e("NewsRepository","Show me getArticles ")
+        return localDataSource.observeAllArticles()
+            .map { entities ->
+                Log.e("NewsRepository","Show me entities $entities ")
+                // 將資料庫實體 (Entity) 列表轉換為領域模型 (Domain Model) 列表
+                entities.map { it.toDomain() }
+
+            }
+            .onStart {
+                // 當有收集者開始監聽此 Flow 時 (例如 ViewModel 的 viewModelScope)，
+                // 這個區塊的程式碼會被執行。
+                try {
+                    Log.e("NewsRepository","onStart: Fetching fresh articles from network...")
+                    val networkResponse = api.fetchTopHeadlines(country, apiKey)
+                    syncArticlesToDB(networkResponse.articles)
+                } catch (e: Exception) {
+                    // 如果網路請求失敗，我們只記錄錯誤，但不會中斷整個 Flow。
+                    // UI 仍然可以顯示來自資料庫的舊資料。
+                    Log.e("NewsRepository","Network fetch failed in onStart $e" )
+                }
+            }
+            // 確保所有上游操作 (map, onStart 裡的網路請求, DB查詢) 都在 IO 線程池中執行。
+            .flowOn(Dispatchers.IO)
     }
 
     /**
-     * Alternative: Fetches top headlines from the network and emits them as a Flow.
-     * This version handles its own try-catch and emits results or errors.
-     * ViewModel might prefer the suspend function version for more control.
+     * 將從網路獲取的文章同步到本地資料庫。
+     * 會比對 title 和 content，只插入不存在的文章。
      */
-    fun fetchTopHeadlinesNetworkFlow(country: String, apiKey: String): Flow<List<Article>> = flow {
-        try {
-            if (isCurrentlyFetchingNetwork.compareAndSet(false, true)) {
-                Timber.d("Fetching (flow) from network: country=$country")
-                val response = api.fetchTopHeadlines(country, apiKey)
-                emit(response.articles ?: emptyList())
-                isCurrentlyFetchingNetwork.set(false) // Reset after successful emission
-            } else {
-                Timber.d("Network fetch (flow) already in progress, skipping emission.")
-                // Optionally emit current DB state or an empty list if skipping
-            }
-        } catch (e: IOException) {
-            Timber.e(e, "Network IOException in fetchTopHeadlinesNetworkFlow")
-            throw e // Let the collector in ViewModel handle this
-        } catch (e: Exception) {
-            Timber.e(e, "General Exception in fetchTopHeadlinesNetworkFlow")
-            throw e // Let the collector in ViewModel handle this
-        } finally {
-            // Ensure the flag is reset if an exception occurs before emit and it was set
-            if(isCurrentlyFetchingNetwork.get()) isCurrentlyFetchingNetwork.set(false)
-        }
-    }.flowOn(Dispatchers.IO) // Perform network operations on IO dispatcher
-
-    /**
-     * Syncs a list of domain Article objects into the local Realm database.
-     * This operation clears existing articles and sources before writing new ones.
-     */
-    suspend fun syncArticlesToDB(articles: List<Article>) = withContext(Dispatchers.Default) {
+    private suspend fun syncArticlesToDB(articles: List<Article>) {
         if (articles.isEmpty()) {
-            Timber.d("No articles to sync to DB.")
-            // Optionally clear DB if an empty list means everything should be wiped
-            // realm.write {
-            //    delete<SourceRealm>()
-            //    delete<ArticleRealm>()
-            // }
-            return@withContext
+            return
         }
-        Timber.d("Syncing ${articles.size} articles to DB.")
-        realm.write {
-            // Consider more granular updates if needed, instead of full delete/re-insert
-            val existingArticleUrls = query<ArticleRealm>().find().map { it.url }.toSet()
-            delete<SourceRealm>() // This might be too broad if sources are shared or stable
-            delete<ArticleRealm>()
+        Log.e("NewsRepository","Syncing ${articles.size} articles to DB.")
 
-            articles.forEach { article ->
-                copyToRealm(article.toRealmObject())
+        val articlesToInsert = mutableListOf<ArticleEntity>()
+        for (article in articles) {
+            if (article.title.isNullOrBlank() || article.url.isNullOrBlank()) {
+                continue // 跳過無效資料
             }
+
+            val existing = localDataSource.findArticleByTitleAndContent(article.title, article.content)
+            if (existing == null) {
+                articlesToInsert.add(article.toEntity())
+            } else {
+                Log.e("NewsRepository","Article '${article.title}' already exists. Skipping.")
+            }
+        }
+
+        if (articlesToInsert.isNotEmpty()) {
+            Log.e("NewsRepository","Upserting ${articlesToInsert.size} new/updated articles.")
+            localDataSource.upsertArticles(articlesToInsert)
         }
     }
 
-    // Expose the fetching state if ViewModel needs to check it
-    fun isCurrentlyFetchingFromNetwork(): Boolean = isCurrentlyFetchingNetwork.get()
-}
+    /**
+     * 提供刪除單一文章的功能。
+     */
+//    suspend fun deleteArticle(article: Article) {
+//        Napier.d("Deleting article: ${article.title}")
+//        localDataSource.deleteArticle(article.toEntity())
+//    }
+    suspend fun deleteArticle(article: Article) {
+        // 確保 article.url 不為 null 或空
+        article.url?.let { url ->
+            Log.e("NewsRepository","Deleting article: ${article.title}")
+            // 修改：傳入 url 而不是整個 entity
+            localDataSource.deleteArticle(url)
+        }
+    }
 
-private fun ArticleRealm.toDomain(): Article {
-    return Article(
-        author = author,
-        content = content,
-        description = description,
-        publishedAt = publishedAt,
-        source = Source(
-            name = source?.name,
-            id = source?.id
-        ),
-        title = title,
-        url = url,
-        urlToImage = urlToImage
-    )
-}
-
-
-private fun Article.toRealmObject(): ArticleRealm {
-    return ArticleRealm(
-        author = author,
-        content = content,
-        description = description,
-        publishedAt = publishedAt,
-        source = SourceRealm(
-            name = source?.name,
-            id = source?.id
-        ),
-        title = title,
-        url = url,
-        urlToImage = urlToImage
-    )
+    /**
+     * 提供刪除所有文章的功能。
+     */
+    suspend fun clearAllArticles() {
+        Log.e("NewsRepository","Clearing all articles from DB.")
+        localDataSource.deleteAllArticles()
+    }
 }

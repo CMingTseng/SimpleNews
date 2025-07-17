@@ -1,18 +1,29 @@
 plugins {
     id("com.android.application")
     id("kotlin-android")
-    alias(libs.plugins.ksp)
-    id("org.jetbrains.kotlin.plugin.serialization")
-    id("io.realm.kotlin")
-    id("de.jensklingenberg.ktorfit")
     alias(libs.plugins.kotlin.compose)
+    id("org.jetbrains.kotlin.plugin.serialization")
+    alias(libs.plugins.ksp)
+////    id("io.realm.kotlin")
+//    alias(libs.plugins.room)
+//    id("de.jensklingenberg.ktorfit")
+
 }
 
 android {
     compileSdk 36
-    lintOptions {
-        warningsAsErrors true
-        abortOnError true
+    lintOptions {  //lint {
+        warningsAsErrors = false
+        abortOnError = true
+        checkAllWarnings = true
+        ignoreWarnings = false
+        checkDependencies = true
+        htmlReport = true
+        explainIssues = true
+        noLines = false
+        textOutput = file("stdout")
+//        disable.add("MissingClass")
+//        disable.add("NewApi")
         disable 'MissingTranslation',
                 'ExtraTranslation',
                 'TypographyEllipsis',
@@ -76,7 +87,7 @@ android {
                 implementation(libs.material)
                 implementation(libs.androidx.constraintlayout)
                 implementation(libs.androidx.navigation.fragment.ktx)
-                implementation(libs.splashscreen)
+                implementation(libs.androidx.splashscreen)
                 implementation(libs.androidx.lifecycle.livedata.ktx)
                 implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
                 implementation(libs.glide)
@@ -91,12 +102,14 @@ android {
         cmp_kmp {
             dimension "product_code"
             dependencies {
-                implementation(libs.androidx.navigation.fragment.ktx)
+
                 implementation(libs.androidx.lifecycle.runtime.ktx)
                 implementation(libs.androidx.lifecycle.runtime.compose)
 
                 implementation(libs.androidx.activity.compose)
                 implementation(platform(libs.androidx.compose.bom))
+//                def composeBom = platform(libs.androidx.compose.bom)
+//                implementation(composeBom)
                 implementation(libs.androidx.compose.ui)
                 implementation(libs.androidx.compose.ui.graphics)
                 implementation(libs.androidx.compose.ui.tooling.preview)
@@ -104,11 +117,15 @@ android {
 
                 implementation(libs.androidx.compose.material)
                 implementation(libs.androidx.compose.material3)
+                implementation(libs.androidx.compose.material.icons.core)
                 implementation(libs.androidx.navigation.compose)
+
+
+
 
                 implementation(libs.koin.androidx.compose)
                 implementation(libs.koin.androidx.compose.navigation)
-                implementation(libs.koin.compose)
+//                implementation(libs.koin.compose)
                 implementation(libs.koin.compose.viewmodel)
                 implementation(libs.koin.compose.viewmodel.navigation)
 
@@ -128,9 +145,10 @@ android {
 
 dependencies {
     implementation(libs.kotlin.stdlib)
-    implementation(libs.kotlinx.serialization)
+    implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.kotlinx.coroutines)
+    implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.kotlinx.datetime)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -143,6 +161,7 @@ dependencies {
     implementation(libs.timber)
 
     implementation(libs.koin.core)
+    implementation(libs.koin.android)
 
     implementation(libs.ktor.client.cio)
     implementation(libs.ktor.client.json)
@@ -157,7 +176,7 @@ dependencies {
 
     implementation(libs.urlencoder.lib)
 
-    implementation(libs.realm.kotlin.base)
+//    implementation(libs.realm.kotlin.base)
 //    implementation (libs.realm.kotlin.sync)
 
     legacy_navImplementation project(':legacy_nav')

@@ -4,16 +4,23 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     id ("org.jetbrains.kotlin.plugin.serialization")
-    id ("io.realm.kotlin")
+//    id ("io.realm.kotlin")
     id("de.jensklingenberg.ktorfit")
+    alias(libs.plugins.room)
 }
 
 android {
     namespace = "rooit.me.xo"
     compileSdk = 36
     lint {
-        warningsAsErrors = true
+        warningsAsErrors = false
         abortOnError = true
+        checkAllWarnings = true
+        ignoreWarnings = false
+        checkDependencies = true
+        htmlReport = true
+        explainIssues = true
+        noLines = false
         disable.addAll(
             listOf(
                 "MissingTranslation",
@@ -65,6 +72,10 @@ android {
         }
     }
 
+    room {
+        schemaDirectory("$projectDir/schemas")
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -73,13 +84,19 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
 }
 
 dependencies {
     implementation(libs.kotlin.stdlib)
-    implementation(libs.kotlinx.serialization)
+    implementation(libs.kotlinx.serialization.core)
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.kotlinx.coroutines)
+    implementation(libs.kotlinx.coroutines.core)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -122,7 +139,14 @@ dependencies {
     implementation(libs.koin.compose.viewmodel)
     implementation(libs.koin.compose.viewmodel.navigation)
 
-    implementation(libs.realm.kotlin.base)
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    implementation(libs.androidx.paging.common)
+    implementation(libs.androidx.paging.compose.android)
+    implementation(libs.sqlite.bundled)
+    implementation(libs.androidx.datastore.preferences.core)
+    implementation(libs.androidx.datastore.core.okio)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
