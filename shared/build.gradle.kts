@@ -22,7 +22,7 @@ android {
                 "TypographyDashes"
             )
         )
-        //
+
         // disable("MissingTranslation",
         //         "ExtraTranslation",
         //         "TypographyEllipsis",
@@ -94,6 +94,12 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
 }
 
 dependencies {
@@ -102,17 +108,14 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.kotlinx.coroutines.core)
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.activity.ktx)
 
     implementation(libs.androidx.activity.compose)
+    //Jetpack compose
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.foundation)
-
     implementation(libs.androidx.compose.material)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.navigation.compose)
@@ -122,6 +125,7 @@ dependencies {
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose)
     implementation(libs.koin.androidx.compose.navigation)
+
     implementation(libs.koin.compose)
     implementation(libs.koin.compose.viewmodel)
     implementation(libs.koin.compose.viewmodel.navigation)
@@ -135,7 +139,7 @@ dependencies {
     implementation(project(":common"))
     implementation(libs.urlencoder.lib)
 
-    implementation(libs.timber)
+    implementation(libs.napier)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

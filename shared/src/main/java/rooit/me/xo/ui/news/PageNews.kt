@@ -42,7 +42,7 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.ui.unit.sp
-import timber.log.Timber
+import rooit.me.xo.utils.log.Log
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
@@ -127,7 +127,7 @@ fun PageNews(modifier: Modifier = Modifier, vm: NewsViewModel = koinViewModel(),
                             title = article.title ?: "No Title",
                             content = article.content ?: article.description ?: "",
                             onItemClick = {
-                                Timber.d("News item clicked: ${article.title}")
+                                Log.i("News item clicked: ${article.title}")
 
                                 onNewsItemClickedAndPopBack("Show me back form news")
                                 // navController.navigate("newsDetail/${article.url}")

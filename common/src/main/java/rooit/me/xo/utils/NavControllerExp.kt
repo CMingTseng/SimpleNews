@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.os.Parcelable
 import androidx.core.net.toUri
 import androidx.navigation.*
-import timber.log.Timber
+import rooit.me.xo.utils.log.Log
 
 //Ref : https://stackoverflow.com/questions/65610003/pass-parcelable-argument-with-compose-navigation/68847035#68847035
 //Ref : https://stackoverflow.com/questions/68747549/jetpack-compose-navigation-with-multiple-optional-argments
@@ -22,11 +22,11 @@ fun NavController.navigate(
         .Builder
         .fromUri(navdestinationrouteUri)
         .build()
-//    Timber.e("Show me NavDestination route ${navdestinationroute} \n uri $navdestinationrouteUri \n routeLink $routeLink")
+    Log.i("Show me NavDestination route ${navdestinationroute} \n uri $navdestinationrouteUri \n routeLink $routeLink")
     val deepLinkMatch = graph.matchDeepLink(routeLink)
-//    Timber.d("--- Printing NavGraph Details ---")
-//    printNavGraphDetails(this.graph) // 打印整個導航圖
-//    Timber.d("--- End of NavGraph Details ---")
+    Log.i("--- Printing NavGraph Details ---")
+//    printNavGraphDetails(this.graph)
+    Log.i("--- End of NavGraph Details ---")
     if (deepLinkMatch != null) {
         val destination = deepLinkMatch.destination
         val id = destination.id
@@ -37,9 +37,10 @@ fun NavController.navigate(
 }
 
 private fun printNavGraphDetails(navGraph: NavGraph, indent: String = "") {
-    Timber.d("${indent}Graph ID: ${navGraph.id}, Route: ${navGraph.route}, DisplayName: ${navGraph.displayName}")
+    Log.i("${indent}Graph ID: ${navGraph.id}, Route: ${navGraph.route}, DisplayName: ${navGraph.displayName}")
+    println()
     navGraph.forEach { destination ->
-        Timber.d("${indent}  Destination ID: ${destination.id}, Route: ${destination.route}, DisplayName: ${destination.displayName}, Navigator: ${destination.navigatorName}")
+        Log.i("${indent}  Destination ID: ${destination.id}, Route: ${destination.route}, DisplayName: ${destination.displayName}, Navigator: ${destination.navigatorName}")
         if (destination is NavGraph) {
             printNavGraphDetails(destination, "$indent    ") // 遞迴打印子圖
         } else {

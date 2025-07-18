@@ -92,7 +92,6 @@ android {
                 implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
                 implementation(libs.glide)
                 ksp(libs.glide.ksp)
-                implementation(libs.koin.android)
 
 //                debugImplementation project(path: ':shared', configuration: 'legacy_navDebug')
 //                releaseImplementation project(path: ':shared', configuration: 'legacy_navRelease')
@@ -103,10 +102,11 @@ android {
             dimension "product_code"
             dependencies {
 
-                implementation(libs.androidx.lifecycle.runtime.ktx)
+
                 implementation(libs.androidx.lifecycle.runtime.compose)
 
                 implementation(libs.androidx.activity.compose)
+                //Jetpack compose
                 implementation(platform(libs.androidx.compose.bom))
 //                def composeBom = platform(libs.androidx.compose.bom)
 //                implementation(composeBom)
@@ -120,7 +120,7 @@ android {
                 implementation(libs.androidx.compose.material.icons.core)
                 implementation(libs.androidx.navigation.compose)
 
-
+                implementation(libs.urlencoder.lib)
 
 
                 implementation(libs.koin.androidx.compose)
@@ -155,27 +155,17 @@ dependencies {
     implementation(libs.androidx.activity.ktx)
 
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
 
     implementation(libs.androidx.navigation.ui.ktx)
 
-    implementation(libs.timber)
+
 
     implementation(libs.koin.core)
     implementation(libs.koin.android)
 
-    implementation(libs.ktor.client.cio)
-    implementation(libs.ktor.client.json)
-    implementation(libs.ktor.client.logging)
-    implementation(libs.ktor.client.serialization)
-    implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.serialization.json)
-
-    implementation(libs.de.ktorfit)
-    implementation(libs.de.ktorfit.converters.call)
-    implementation(libs.de.ktorfit.converters.flow)
-
-    implementation(libs.urlencoder.lib)
-
+    implementation(libs.napier)
+    
 //    implementation(libs.realm.kotlin.base)
 //    implementation (libs.realm.kotlin.sync)
 

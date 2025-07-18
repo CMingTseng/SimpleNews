@@ -104,7 +104,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
 
-    implementation(libs.timber)
 
     implementation(libs.ktor.client.cio)
     implementation(libs.ktor.client.json)
@@ -147,6 +146,8 @@ dependencies {
     implementation(libs.sqlite.bundled)
     implementation(libs.androidx.datastore.preferences.core)
     implementation(libs.androidx.datastore.core.okio)
+
+    implementation(libs.napier)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

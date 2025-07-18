@@ -13,7 +13,7 @@ import rooit.me.xo.di.gatewayModule
 import rooit.me.xo.di.getDatabaseModule
 import rooit.me.xo.di.repositoryModule
 import rooit.me.xo.di.viewModelModule
-import timber.log.Timber
+import rooit.me.xo.utils.log.Log
 
 class MainApp : Application() {
     companion object {
@@ -22,9 +22,7 @@ class MainApp : Application() {
     }
     override fun onCreate() {
         super.onCreate()
-        if(BuildConfig.DEBUG){
-            Timber.plant(Timber.DebugTree())
-        }
+        Log.init(packageName)
         startKoin {
             // Log Koin into Android logger
             androidLogger(Level.DEBUG)

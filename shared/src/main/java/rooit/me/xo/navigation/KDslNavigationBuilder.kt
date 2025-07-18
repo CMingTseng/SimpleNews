@@ -16,7 +16,7 @@ import rooit.me.xo.route.Route.Companion.ARGS_KEY
 import rooit.me.xo.ui.login.PageLogin
 import rooit.me.xo.ui.news.PageNews
 import rooit.me.xo.ui.splash.PageSplash
-import timber.log.Timber
+import rooit.me.xo.utils.log.Log
 
 class KDslNavigationBuilder : NavGraphContentLambdaBuilder {
     companion object {
@@ -95,11 +95,11 @@ class KDslNavigationBuilder : NavGraphContentLambdaBuilder {
 
                 // collectAsStateWithLifecycle 會感知生命周期，更安全
                 val returnedNewsTitle by returnedNewsTitleFlow.collectAsStateWithLifecycle()
-                Timber.e("NavigationArgs  show returnedData : $returnedNewsTitle")
+                Log.i("NavigationArgs  show returnedData : $returnedNewsTitle")
                 PageLogin(
                     onNavigateToNews = {result->
                         val stringToEncode = result ?: ""
-                        Timber.e("NavigationArgs  login  Processed: $result")
+                        Log.i("NavigationArgs  login  Processed: $result")
                         // 清除 SavedStateHandle 中的值，以便下次即使相同的值也能觸發更新
                         // 注意：getStateFlow 的一個行為特性是，如果鍵不存在，它會使用初始值創建並返回 Flow。
                         // remove() 後，下次 getStateFlow 仍會以 initialValue 重新開始。

@@ -20,15 +20,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import rooit.me.xo.R
+import rooit.me.xo.utils.log.Log
 import rooit.me.xo.utils.toJsonObject
 import rooit.me.xo.utils.toMap
-import timber.log.Timber
-
 @Composable
 fun PageSplash( modifier: Modifier = Modifier, onNavigateToLogin: (result: String?) -> Unit, onNavigateToNews: (result: String?) -> Unit ,args:String?=null) {
 
     LaunchedEffect(args) {
-        Timber.e("Show me   PageSplash received args: $args")
+        Log.i("Show me   PageSplash received args: $args")
     }
     val processed = mutableMapOf<String, Any>()
     args?.let {
