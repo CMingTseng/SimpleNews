@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     id ("org.jetbrains.kotlin.plugin.serialization")
@@ -122,13 +123,26 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
 
     implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.foundation)
-    implementation(libs.androidx.compose.material)
-    implementation(libs.androidx.compose.material3)
+    //JetPack compose
+//    implementation(platform(libs.androidx.compose.bom))
+//    implementation(libs.androidx.compose.ui)
+//    implementation(libs.androidx.compose.ui.graphics)
+//    implementation(libs.androidx.compose.ui.tooling.preview)
+//    implementation(libs.androidx.compose.foundation)
+//    implementation(libs.androidx.compose.material)
+//    implementation(libs.androidx.compose.material3)
+
+    //jetbrains  compose
+    implementation(compose.runtime)
+    implementation(compose.foundation)
+    implementation(compose.material)
+    implementation(compose.material3)
+    implementation(compose.ui)
+    implementation(compose.components.resources)
+    implementation(compose.components.uiToolingPreview)
+    implementation(libs.jetbrains.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.jetbrains.androidx.navigation.compose)
+    implementation(compose.preview)
 
     implementation(libs.koin.core)
     implementation(libs.koin.android)
