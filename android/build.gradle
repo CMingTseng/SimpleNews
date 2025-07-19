@@ -172,7 +172,9 @@ dependencies {
 
     implementation(libs.androidx.navigation.ui.ktx)
 
-
+    implementation(libs.de.ktorfit)
+    implementation(libs.de.ktorfit.converters.call)
+    implementation(libs.de.ktorfit.converters.flow)
 
     implementation(libs.koin.core)
     implementation(libs.koin.android)

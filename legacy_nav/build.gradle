@@ -38,14 +38,12 @@ android {
             matchingFallbacks = ['release', 'debug']
             minifyEnabled false
             shrinkResources false
-            debuggable true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-system-common.pro', 'proguard-third-party.pro', 'proguard-module.pro'
         }
         release {
             matchingFallbacks = ['release', 'debug']
             minifyEnabled false
             shrinkResources false
-            debuggable false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }

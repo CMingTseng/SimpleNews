@@ -1,10 +1,137 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+
 plugins {
     id("com.android.library")
-    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     id ("org.jetbrains.kotlin.plugin.serialization")
+    alias(libs.plugins.jetbrains.compose.hot.reload)
+}
+
+kotlin {
+    androidTarget {
+        compilations.all {
+            compileTaskProvider.configure {
+                compilerOptions {
+                    jvmTarget.set(JvmTarget.JVM_1_8)
+                    freeCompilerArgs.add("-Xjdk-release=${JavaVersion.VERSION_1_8}")
+                }
+            }
+        }
+//        @OptIn(ExperimentalKotlinGradlePluginApi::class)
+//        compilerOptions {
+//            jvmTarget.set(JvmTarget.JVM_1_8)
+//        }
+    }
+
+//    jvm("desktop") {
+//        compilerOptions {
+//            jvmTarget.set(JvmTarget.JVM_17)
+//        }
+//    }
+//
+//    listOf(
+//        iosX64(),
+//        iosArm64(),
+//        iosSimulatorArm64()
+//    ).forEach {
+//        it.binaries.framework {
+//            baseName = "shared"
+//            isStatic = true
+//        }
+//    }
+//
+//    @OptIn(ExperimentalWasmDsl::class)
+//    wasmJs {
+//        browser {
+//            val rootDirPath = project.rootDir.path
+//            val projectDirPath = project.projectDir.path
+//            commonWebpackConfig {
+//                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
+//                    static = (static ?: mutableListOf()).apply {
+//                        // Serve sources to debug inside browser
+//                        add(rootDirPath)
+//                        add(projectDirPath)
+//                    }
+//                }
+//            }
+//        }
+//    }
+
+    sourceSets {
+        all {
+            languageSettings {
+                optIn("org.jetbrains.compose.resources.ExperimentalResourceApi")
+            }
+        }
+        val commonMain by getting {
+            dependencies {
+                implementation(libs.kotlin.stdlib)
+                implementation(libs.kotlinx.serialization.core)
+                implementation(libs.kotlinx.serialization.json)
+                implementation(libs.kotlinx.coroutines.core)
+
+//                implementation(libs.androidx.activity.compose)
+
+                //jetbrains  compose
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material)
+                implementation(compose.material3)
+                implementation(compose.ui)
+                implementation(compose.components.resources)
+                implementation(compose.components.uiToolingPreview)
+                implementation(libs.jetbrains.androidx.lifecycle.viewmodel)
+                implementation(libs.jetbrains.androidx.lifecycle.viewmodel.compose)
+                implementation(libs.jetbrains.androidx.navigation.compose)
+                implementation(compose.preview)
+
+
+                implementation(libs.koin.core)
+                implementation(libs.koin.compose)
+                implementation(libs.koin.compose.viewmodel)
+                implementation(libs.koin.compose.viewmodel.navigation)
+
+                implementation(libs.coil.core)
+                implementation(libs.coil)
+                implementation(libs.coil.compose)
+                implementation(libs.coil.compose.core)
+                implementation(libs.coil.network.ktor3)
+                implementation(libs.coil.svg)
+
+                implementation(libs.urlencoder.lib)
+                implementation(libs.napier)
+
+                implementation(project(":common"))
+            }
+
+            commonTest.dependencies {
+                implementation(libs.kotlin.test)
+            }
+
+            androidMain {
+                dependencies {
+                    implementation(libs.androidx.activity.compose)
+                }
+            }
+
+            val androidUnitTest by getting {
+                dependencies {
+                    implementation(libs.androidx.junit)
+                    implementation(libs.androidx.espresso.core)
+                }
+            }
+
+            val androidInstrumentedTest by getting {
+                dependencies {
+                    implementation(libs.androidx.junit)
+                    implementation(libs.androidx.espresso.core)
+                }
+            }
+        }
+    }
 }
 
 android {
@@ -33,14 +160,12 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true
         buildConfig = false
         compose = true
     }
 
     defaultConfig {
         minSdk = 21
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -92,9 +217,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
-    }
 
     packaging {
         resources {
@@ -104,57 +226,10 @@ android {
 }
 
 dependencies {
-    implementation(libs.kotlin.stdlib)
-    implementation(libs.kotlinx.serialization.core)
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.kotlinx.coroutines.core)
+}
 
-
-    implementation(libs.androidx.activity.compose)
-//    //Jetpack compose
-//    implementation(platform(libs.androidx.compose.bom))
-//    implementation(libs.androidx.compose.ui)
-//    implementation(libs.androidx.compose.ui.graphics)
-//    implementation(libs.androidx.compose.ui.tooling.preview)
-//    implementation(libs.androidx.compose.foundation)
-//    implementation(libs.androidx.compose.material)
-//    implementation(libs.androidx.compose.material3)
-//    implementation(libs.androidx.navigation.compose)
-
-    //jetbrains  compose
-    implementation(compose.runtime)
-    implementation(compose.foundation)
-    implementation(compose.material)
-    implementation(compose.material3)
-    implementation(compose.ui)
-    implementation(compose.components.resources)
-    implementation(compose.components.uiToolingPreview)
-    implementation(libs.jetbrains.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.jetbrains.androidx.navigation.compose)
-    implementation(compose.preview)
-
-
-    implementation(libs.koin.core)
-    implementation(libs.koin.android)
-    implementation(libs.koin.androidx.compose)
-    implementation(libs.koin.androidx.compose.navigation)
-
-    implementation(libs.koin.compose)
-    implementation(libs.koin.compose.viewmodel)
-    implementation(libs.koin.compose.viewmodel.navigation)
-
-    implementation(libs.coil.core)
-    implementation(libs.coil)
-    implementation(libs.coil.compose)
-    implementation(libs.coil.compose.core)
-    implementation(libs.coil.network.ktor3)
-    implementation(libs.coil.svg)
-    implementation(project(":common"))
-    implementation(libs.urlencoder.lib)
-
-    implementation(libs.napier)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+compose.resources {
+    publicResClass = true
+    packageOfResClass = "rooit.me.xo"
+    generateResClass = always
 }
